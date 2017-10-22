@@ -6,7 +6,7 @@ repeat {
   outData <- sample(inData, 50)
   writeLines(outData, fileOut)
   
-  if (nchar(inData[1000]) == 0) {
+  if (length(inData) != 1000) {
     break
   }
 }
