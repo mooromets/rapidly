@@ -18,10 +18,14 @@ textCleaner <- function (x) {
   x <- gsub(x,
             pattern = " [-'.] ", 
             replacement = "")
-  # remove dots, that are most likely an end of a sentence 
+  # remove leading and hanging spaces in each line
   x <- gsub(x,
-            pattern = "[A-Za-z0-9][.]( +[A-Z]|$)", 
-            replacement = " ")
+       pattern = "([[:space:]]+$)|(^[[:space:]]+)", 
+       replacement = "")
+  # remove dots, that are most likely are at the end of a sentence 
+  x <- gsub(x,
+            pattern = "([[:alnum:]])[.](( +([A-Z]))|$)", 
+            replacement = "\\1 \\4")
   # remove dots, that are most likely an end of a sentence 
   x <- gsub(x,
             pattern = "[[:space:]]{2,}", 
