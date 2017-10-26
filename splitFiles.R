@@ -1,4 +1,6 @@
-# split big 'final' files into small "processible" chunks
+# split big 'final' files into small fast-processible chunks
+
+source("./textCleaner.R")
 
 dirPath <- "./data/final/en_US/"
 dirOut <- "./data/chunks/"
@@ -23,6 +25,7 @@ for (f in filesList) {
     chunkNum <- chunkNum + 1
     fileOut <- file(paste0(dirOut, "chunk", as.character(chunkNum), ".txt"), "w")
     inData <- readLines(fileIn, n = LPF, skipNul = TRUE)
+    inData <- textCleaner(inData)
     writeLines(inData, fileOut)
     close(fileOut)  
     

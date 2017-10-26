@@ -1,5 +1,5 @@
 fileIn <- file("./data/final/en_US/en_US.blogs.txt", "r")
-fileOut <- file("./data/sample.txt", "w")
+fileOut <- file("./data/small_sample.txt", "w")
 
 repeat {
   inData <- readLines(fileIn, n = 1000, skipNul = TRUE)
@@ -13,4 +13,3 @@ repeat {
 
 close(fileIn)
 close(fileOut)
-
