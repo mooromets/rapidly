@@ -1,3 +1,16 @@
+cleanStep1 <- c("[[:punct:]]{2,}", # remove 2+ puctuation marks in a row
+                "[^[:alnum:].'-]", # remove symbols non-existant in words
+                " ([-'.] )+" # remove hanging non-alnum symbols
+                )
+
+cleanStep2 <- c("([[:space:]]+$)|(^[[:space:]]+)", # remove leading and ending spaces
+                "([[:alnum:]])[.](( +([A-Z]))|$)",  # remove dots, that are most likely 
+                                                    # are at the end of a sentence
+                "[[:space:]]{2,}" # remove 2+ spaces in a row
+                )
+
+cleanStep2Repl <- c("", "\\1 \\4", " ")
+
 # function cleans text as preparation for a tokenization
 # INPUT
 #   x - a character vector
@@ -5,30 +18,12 @@
 #   a character vertor
 
 textCleaner <- function (x) {
-  #remove 2+ puctuation marks in a row
-  x <- gsub(x,
-            pattern = "[[:punct:]]{2,}",
-            replacement = " ")
-  # leave only letters, numbers and three more puctuation marks that are
-  # the parts of a language (cost-effective, that's, e.g.)
-  x <- gsub(x,
-            pattern = "[^[:alnum:].'-]", 
-            replacement = " ")
-  # remove hanging punctuation marks
-  x <- gsub(x,
-            pattern = " [-'.] ", 
-            replacement = "")
-  # remove leading and hanging spaces in each line
-  x <- gsub(x,
-       pattern = "([[:space:]]+$)|(^[[:space:]]+)", 
-       replacement = "")
-  # remove dots, that are most likely are at the end of a sentence 
-  x <- gsub(x,
-            pattern = "([[:alnum:]])[.](( +([A-Z]))|$)", 
-            replacement = "\\1 \\4")
-  # remove dots, that are most likely an end of a sentence 
-  x <- gsub(x,
-            pattern = "[[:space:]]{2,}", 
-            replacement = " ")
+  x <- gsub(x, pattern = cleanStep1[1], replacement = " ")
+  x <- gsub(x, pattern = cleanStep1[2], replacement = " ")
+  x <- gsub(x, pattern = cleanStep1[3], replacement = " ")
+  
+  x <- gsub(x, pattern = cleanStep2[1], replacement = cleanStep2Repl[1])
+  x <- gsub(x, pattern = cleanStep2[2], replacement = cleanStep2Repl[2])
+  x <- gsub(x, pattern = cleanStep2[3], replacement = cleanStep2Repl[3])
   x
 }
