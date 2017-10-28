@@ -1,7 +1,16 @@
-correct1Pat <- c("( i )|(i$)|(^i)")
-correct1Rep <- c(" I ")
+source("textCleaner.R")
+
+correctPatterns <- data.frame(
+  pattern = c(
+    "( |^)i([ ']|$)", # small "i" to uppercase
+    "([[:alpha:]]) (d|ll|ve|s)" # missed '
+  ),
+  replacement = c(
+    "\\1I\\2",
+    "\\1'\\2"
+  )
+)
 
 textCorrector <- function(x) {
-  x <- gsub(x, pattern = correct1Pat[1], replacement = correct1Rep[1])
-  x
-} 
+  textCleaner(x, correctPatterns)
+}

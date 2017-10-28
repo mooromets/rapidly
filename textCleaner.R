@@ -17,11 +17,11 @@ cleanPatterns <- data.frame(
 # OUTPUT
 #   a character vertor
 
-textCleaner <- function (x) {
-  for (i in 1:nrow(cleanPatterns)) {
+textCleaner <- function (x, patterns = cleanPatterns) {
+  for (i in 1:nrow(patterns)) {
     x <- gsub(x, 
-              pattern = cleanPatterns[i, "pattern"], 
-              replacement = cleanPatterns[i, "replacement"])
+              pattern = patterns[i, "pattern"], 
+              replacement = patterns[i, "replacement"])
   }
   x
 }

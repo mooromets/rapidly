@@ -13,4 +13,4 @@ system.time(
 tdm2 <- TermDocumentMatrix(corpV, list(tokenize = nGramTok, wordLengths=c(1,Inf)))
 )
 
-head(findFreqTerms(tdm2, 5000), 40)
+#head(findFreqTerms(tdm2, 10000), 20)
