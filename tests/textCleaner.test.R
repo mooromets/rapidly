@@ -1,27 +1,27 @@
 source("../textCleaner.R")
 require(testthat)
 
-test_that("cleanStep1 regexp", {
-  expect_equal(gsub(cleanStep1[1], " ", "! ..0-0???a!.,?s."), "!  0-0 a s.")
-  expect_equal(gsub(cleanStep1[2], " ", "as$0~ {ff} &yeah ? :ha"), 
+test_that("cleanPatterns regexp", {
+  expect_equal(gsub(cleanPatterns[1,1], cleanPatterns[1,2], 
+                    "! ..0-0???a!.,?s."), 
+               "!  0-0 a s.")
+  expect_equal(gsub(cleanPatterns[2,1], cleanPatterns[2,2], 
+                    "as$0~ {ff} &yeah ? :ha"), 
                "as 0   ff   yeah    ha")
-  expect_equal(gsub(cleanStep1[3], " ", 
+  expect_equal(gsub(cleanPatterns[3,1], cleanPatterns[3,2], 
                     "won't ' . i.e. . - -time cost-effective Torres'"), 
                "won't i.e. -time cost-effective Torres'")
-})
-
-test_that("cleanStep2 regexp", {
-  expect_equal(gsub(cleanStep2[1], cleanStep2Repl[1], " -foo . bar "), 
+  expect_equal(gsub(cleanPatterns[4,1], cleanPatterns[4,2], " -foo . bar "), 
                "-foo . bar")
-  expect_equal(gsub(cleanStep2[1], cleanStep2Repl[1], ". foo b   a  r"), 
+  expect_equal(gsub(cleanPatterns[4,1], cleanPatterns[4,2], ". foo b   a  r"), 
                ". foo b   a  r")
-  expect_equal(gsub(cleanStep2[2], cleanStep2Repl[2], "end. Yes."), "end Yes ")
-  expect_equal(gsub(cleanStep2[2], cleanStep2Repl[2], "end. no .50 t.j."), 
+  expect_equal(gsub(cleanPatterns[5,1], cleanPatterns[5,2], "end. Yes."), "end Yes ")
+  expect_equal(gsub(cleanPatterns[5,1], cleanPatterns[5,2], "end. no .50 t.j."), 
                "end. no .50 t.j ")
-  expect_equal(gsub(cleanStep2[2], cleanStep2Repl[2], 
+  expect_equal(gsub(cleanPatterns[5,1], cleanPatterns[5,2], 
                     "i.e. no remove but i.e. Remove"), 
                "i.e. no remove but i.e Remove")
-  expect_equal(gsub(cleanStep2[3], cleanStep2Repl[3], "foo  bar   .dot     yes"), 
+  expect_equal(gsub(cleanPatterns[6,1], cleanPatterns[6,2], "foo  bar   .dot     yes"), 
                "foo bar .dot yes")
 })
 
