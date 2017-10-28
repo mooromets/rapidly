@@ -4,6 +4,7 @@ correctPatterns <- data.frame(
   pattern = c(
     "( |^)i([ ']|$)", # small "i" to uppercase
     "([[:alpha:]]) (d|ll|ve|s|re|m|t)( |$)" # missed '
+    
   ),
   replacement = c(
     "\\1I\\2",

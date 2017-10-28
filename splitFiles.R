@@ -27,7 +27,7 @@ for (f in filesList) {
     fileOut <- file(paste0(dirOut, "chunk", as.character(chunkNum), ".txt"), "w")
     inData <- readLines(fileIn, n = LPF, skipNul = TRUE)
     inData <- textCleaner(inData)
-    inData <- textCleaner(inData)
+    inData <- textCorrector(inData)
     writeLines(inData, fileOut)
     close(fileOut)  
     
