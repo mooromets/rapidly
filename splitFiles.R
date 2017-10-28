@@ -1,7 +1,6 @@
 # split big 'final' files into small fast-processible chunks
 
 source("./textCleaner.R")
-source("./textCorrector.R")
 
 # read censured words
 censured <- ""
@@ -44,8 +43,7 @@ for (f in filesList) {
     chunkNum <- chunkNum + 1
     fileOut <- file(paste0(dirOut, "chunk", as.character(chunkNum), ".txt"), "w")
     inData <- readLines(fileIn, n = LPF, skipNul = TRUE)
-    inData <- textCleaner(inData)
-    inData <- textCorrector(inData, censured)
+    inData <- textCleaner(inData, censured = censured)
     writeLines(inData, fileOut)
     close(fileOut)  
     
