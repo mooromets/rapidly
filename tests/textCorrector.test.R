@@ -52,18 +52,21 @@ test_that("textCorrector test", {
 })
 
 test_that("textCorrector censure test", {
+  # read censured words
   censured <- ""
   cens <- file("data/censure.txt", "r")
   repeat {
     line = readLines(cens, n = 1)
     if ( length(line) == 0 ) {
+      censured <- paste0(censured, ")( |$)")
       break
     }
     if (nchar(censured) == 0)
-      censured <- paste0("(", line, ")")
+      censured <- paste0("( |^)(", line)
     else
-      censured <- paste0(censured, "|","(", line, ")")
+      censured <- paste0(censured, "|", line)
   }
   close(cens)
-  expect_equal(textCorrector("suck 1 fuck 2 bitch 3", censured), " 1  2  3")
+  
+  expect_equal(textCorrector("suck 1 fuck 2 bitch 3", censured), " 1 2 3")
 })

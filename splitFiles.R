@@ -9,12 +9,13 @@ cens <- file("data/censure.txt", "r")
 repeat {
   line = readLines(cens, n = 1)
   if ( length(line) == 0 ) {
+    censured <- paste0(censured, ")( |$)")
     break
   }
   if (nchar(censured) == 0)
-    censured <- paste0("(", line, ")")
+    censured <- paste0("( |^)(", line)
   else
-    censured <- paste0(censured, "|","(", line, ")")
+    censured <- paste0(censured, "|", line)
 }
 close(cens)
 
@@ -44,7 +45,7 @@ for (f in filesList) {
     fileOut <- file(paste0(dirOut, "chunk", as.character(chunkNum), ".txt"), "w")
     inData <- readLines(fileIn, n = LPF, skipNul = TRUE)
     inData <- textCleaner(inData)
-    inData <- textCorrector(inData)
+    inData <- textCorrector(inData, censured)
     writeLines(inData, fileOut)
     close(fileOut)  
     

@@ -22,6 +22,6 @@ correctPatterns <- data.frame(
 textCorrector <- function(x, censured = "") {
   x <- textCleaner(x, correctPatterns)
   if (nchar(censured) > 0)
-    x <- gsub(x, pattern = censured, replacement = "", ignore.case = TRUE)
+    x <- gsub(x, pattern = censured, replacement = " ", ignore.case = TRUE)
   x
 }
