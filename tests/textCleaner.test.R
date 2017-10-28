@@ -1,4 +1,5 @@
-source("../textCleaner.R")
+setwd("..")
+source("textCleaner.R")
 require(testthat)
 
 test_that("cleanPatterns regexp", {

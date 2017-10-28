@@ -1,4 +1,5 @@
-source("../textCorrector.R")
+setwd("..")
+source("textCorrector.R")
 require(testthat)
 
 test_that("correct1Pat regexp", {
@@ -10,6 +11,19 @@ test_that("correct1Pat regexp", {
                     correctPatterns[2, 2], 
                     "I d you ll he d she s"), 
                "I'd you'll he'd she's")
+  expect_equal(gsub(correctPatterns[2, 1], 
+                    correctPatterns[2, 2], 
+                    "They re but we re not re-arranged"), 
+               "They're but we're not re-arranged")
+  expect_equal(gsub(correctPatterns[2, 1], 
+                    correctPatterns[2, 2], 
+                    "I m don t won t can t not to be"), 
+               "I'm don't won't can't not to be")
+  expect_equal(gsub(correctPatterns[2, 1], 
+                    correctPatterns[2, 2], 
+                    "it s yes it should not"), 
+               "it's yes it should not")
+  
 })
 
 test_that("textCorrector test", {
