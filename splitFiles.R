@@ -3,6 +3,23 @@
 source("./textCleaner.R")
 source("./textCorrector.R")
 
+# read censured words
+censured <- ""
+cens <- file("data/censure.txt", "r")
+repeat {
+  line = readLines(cens, n = 1)
+  if ( length(line) == 0 ) {
+    break
+  }
+  if (nchar(censured) == 0)
+    censured <- paste0("(", line, ")")
+  else
+    censured <- paste0(censured, "|","(", line, ")")
+}
+close(cens)
+
+
+
 dirPath <- "./data/final/en_US/"
 dirOut <- "./data/chunks/"
 LPF <- 50000 # lines per a chunk file

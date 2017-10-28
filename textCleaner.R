@@ -8,7 +8,11 @@ cleanPatterns <- data.frame(
                                         # are at the end of a sentence
     "[[:space:]]{2,}" # remove 2+ spaces in a row
   ),
-  replacement = c(rep(" ", 3), "", "\\1 \\4", " ")
+  replacement = c(
+    rep(" ", 3), 
+    "", 
+    "\\1 \\4", 
+    " ")
 )
 
 # function cleans text as preparation for a tokenization
