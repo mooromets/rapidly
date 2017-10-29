@@ -20,7 +20,7 @@ close(cens)
 
 
 
-dirPath <- "./data/sample/"#"./data/final/en_US/"
+dirPath <- "./data/final/en_US/"
 dirOut <- "./data/chunks/"
 LPF <- 50000 # lines per a chunk file
 
@@ -43,11 +43,12 @@ for (f in filesList) {
     chunkNum <- chunkNum + 1
     fileOut <- file(paste0(dirOut, "chunk", as.character(chunkNum), ".txt"), "w")
     inData <- readLines(fileIn, n = LPF, skipNul = TRUE)
+    linesRead <- length(inData)
     inData <- textCleaner(inData, censured = censured)
     writeLines(inData, fileOut)
     close(fileOut)  
     
-    if (length(inData) != LPF) {# last chunk from input data
+    if (linesRead < LPF) {# last chunk from input data
       break
     }
   }
