@@ -31,6 +31,8 @@ cleanPatterns <- data.frame(
   )
 )
 
+perlSplitPattern <- "(?<!\\w\\.\\w.)(?<![A-Z][a-z]\\.)(?<=\\.|\\?)\\s"
+
 # function cleans text as preparation for a tokenization
 # INPUT
 #   x - a character vector
@@ -38,6 +40,7 @@ cleanPatterns <- data.frame(
 #   a character vertor
 
 textCleaner <- function (x, patterns = cleanPatterns, censured = "") {
+  x <- unlist(strsplit(x, split =  perlSplitPattern, perl = TRUE))
   for (i in 1:nrow(patterns)) {
     x <- gsub(x, 
               pattern = patterns[i, "pattern"], 
@@ -46,5 +49,7 @@ textCleaner <- function (x, patterns = cleanPatterns, censured = "") {
   if (nchar(censured) > 0) {
     x <- gsub(x, pattern = censured, replacement = " ", ignore.case = TRUE)
   }
-  x
+  #skip too short sentences
+  minSize <- 4 # min size for a sensible sentence 
+  x <- x[nchar(x) >= minSize]
 }

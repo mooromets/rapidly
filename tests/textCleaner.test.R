@@ -97,10 +97,11 @@ test_that("textCorrector censure test", {
 
 test_that("textCleaner", {
   expect_equal(textCleaner("!.:Too many '' punctuation :-) marks... yeah))"),
-               "Too many punctuation marks yeah")
+               c("Too many punctuation marks", "yeah"))
   expect_equal(textCleaner("normal $symbols## only? I'll accept:"),
-               "normal symbols only I'll accept")
-  expect_equal(textCleaner(" . ' - you shall not pass "), "you shall not pass")
+               c("normal symbols only", "I'll accept"))
+  expect_equal(textCleaner(" .  ' - you shall not pass "), 
+               "you shall not pass")
   expect_equal(textCleaner("sentence. Vs. useful dots i.e. .5 end."), 
-               "sentence Vs. useful dots i.e. .5 end ")
+               c("sentence ", "Vs. useful dots i.e. .5 end "))
 })

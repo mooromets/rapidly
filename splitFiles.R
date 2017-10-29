@@ -20,7 +20,7 @@ close(cens)
 
 
 
-dirPath <- "./data/final/en_US/"
+dirPath <- "./data/sample/"#"./data/final/en_US/"
 dirOut <- "./data/chunks/"
 LPF <- 50000 # lines per a chunk file
 
