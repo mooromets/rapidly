@@ -1,0 +1,57 @@
+---
+title: "Corpora Exploratory Analysis"
+author: "Sergey Sambor"
+date: "October 29, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, error = FALSE, warning = FALSE)
+```
+
+## Executive Summary
+
+bla-bla
+
+## Data
+Dataset, provided by SwiftKey, contains four languages with three files in each one: news, blogs and Twitter feeds. In my project I work with English texts only. Three files in total are about 570 MB.
+In detail:
+
+```{r}
+library(stringi)
+setwd("..")
+dirPath <- "data/final/en_US/"
+filesList <- paste0(dirPath, dir(dirPath))
+df <- data.frame()
+for (f in filesList) {
+  fileSize <- round(file.size(f) / 10^6)
+  fileIn <- file(f, "r")
+  inData <- readLines(fileIn, skipNul = TRUE)
+  numLines <- round(length(inData) / 10^6, digits = 2)
+  numWords <-  round(stri_count_words(inData) / 10^6, digits = 2)
+  df <- rbind(df, data.frame(file = f,
+                             size.MB = fileSize,
+                             lines.M = numLines,
+                             words.M = numWords))
+  close(fileIn)
+}
+(df)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
