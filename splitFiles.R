@@ -20,8 +20,8 @@ close(cens)
 
 
 
-dirPath <- "./data/final/en_US/"
-dirOut <- "./data/chunks/"
+dirPath <- "data/final/en_US/"
+dirOut <- "data/chunks/"
 LPF <- 50000 # lines per a chunk file
 
 # prepare output directiry
@@ -53,4 +53,13 @@ for (f in filesList) {
     }
   }
   close(fileIn)
+}
+
+# place every chunk to a separate folder 
+filesList <- dir(dirOut)
+for (i in 1:length(filesList)) {
+  newDirName <- as.character(i)
+  dir.create(paste0(dirOut, newDirName))
+  file.rename(from = paste0(dirOut, filesList[i]),
+              to = paste0(dirOut, newDirName, "/" , filesList[i]))
 }
