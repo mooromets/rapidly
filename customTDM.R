@@ -22,3 +22,13 @@ customTDMn <- function (corpus, nGramMin, nGramMax = nGramMin) {
   ctrlList$tokenize = nGramTok
   TermDocumentMatrix(corpus, ctrlList)
 }
+
+# get most frequent terms in data.frame
+# uses only the first document from TDM
+freqTermsInDF <- function(tdm, lowerBound = 3) {
+  df <- data.frame(as.matrix(tdm), stringsAsFactors = FALSE)
+  index <- df[, 1] >= lowerBound
+  data.frame(term = rownames(df)[index], 
+             freq =  df[index, 1],
+             stringsAsFactors = FALSE)
+}
