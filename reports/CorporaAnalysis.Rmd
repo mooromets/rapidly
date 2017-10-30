@@ -2,7 +2,10 @@
 title: "Corpora Exploratory Analysis"
 author: "Sergey Sambor"
 date: "October 29, 2017"
-output: html_document
+output: 
+  html_document: 
+    fig_height: 6
+    fig_width: 8
 ---
 
 ```{r setup, include=FALSE}
@@ -17,7 +20,7 @@ source("../customTDM.R")
 ```
 
 ## Executive Summary
-In this document I report the structure and summaries of SwiftKey dataset. I explain and describe the way the dataset must be cleaned. Using tm and other packeges I show features, insights and the most frequent ngrams of the provided dataset.
+In this document I report the structure and summaries of SwiftKey dataset. I explain and describe the way the dataset must be cleaned. Using *tm* and other packages I show features, insights and the most frequent ngrams of the provided dataset.
 
 ## Data
 Dataset, provided by SwiftKey, contains four languages with three files in each one: news, blogs and Twitter feeds. In my project I work with English texts only. Three files in total are about 570 MB.
@@ -74,10 +77,12 @@ tdm <- TermDocumentMatrix(corp, list(wordLengths = c(1,Inf),
                                     tokenize = nGramTok))
 (head(findFreqTerms(tdm, 800), 40))
 ```
-"can t", "I m", "I don" and other iterative examinations bring us additional points
-- insert "'" where needed
-- replace shortenings "c" and "u" with "see" and "you" respectively
-- remove "bad" words; a good sample of the list - https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words
+
+These "can t", "I m", "I don" and other iterative examinations bring us additional points
+- insert "'" where needed  
+- replace shortenings "c" and "u" with "see" and "you" respectively  
+- remove "bad" words; a good sample of the list - https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words  
+- make all "i"s (as pronouns) big  
 
 ```{r echo=TRUE}
 setwd("..")
@@ -89,6 +94,7 @@ Terms2 <- customTDMn(corp, 2)
 Terms3 <- customTDMn(corp, 3)
 Terms4 <- customTDMn(corp, 4)
 ```
+
 As it can be seen, bigrams slightly changed.
 Now it's time to explore core things in frequencies of the most popular ngrams.
 ```{r}
@@ -120,6 +126,7 @@ plot4 <- ggplot(Terms4[1:25,], aes(reorder(term, -freq), freq)) +
 
 grid.arrange(plot1, plot2, plot3, plot4, ncol=2, nrow=2)
 ```
+
 As it was stated above, so-called stopwords are the most frequent and widly used parts of the language, so we cannot afford to ignore them. Another interesting feature is that most frequent bigrams don't consist of the most frequent unigrams. And the most frequent trigrams have almost nothing in common with the most frequent bigrams.  
 
 ## Next Steps
