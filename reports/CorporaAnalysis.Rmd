@@ -7,51 +7,120 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, error = FALSE, warning = FALSE)
+library(stringi)
+library(tm)
+library(RWeka)
+library(ggplot2)
+library(dplyr)
+library(gridExtra)
+source("../customTDM.R")
 ```
 
 ## Executive Summary
-
-bla-bla
+In this document I report the structure and summaries of SwiftKey dataset. I explain and describe the way the dataset must be cleaned. Using tm and other packeges I show features, insights and the most frequent ngrams of the provided dataset.
 
 ## Data
 Dataset, provided by SwiftKey, contains four languages with three files in each one: news, blogs and Twitter feeds. In my project I work with English texts only. Three files in total are about 570 MB.
 In detail:
 
 ```{r}
-library(stringi)
 setwd("..")
 dirPath <- "data/final/en_US/"
 filesList <- paste0(dirPath, dir(dirPath))
 df <- data.frame()
 for (f in filesList) {
-  fileSize <- round(file.size(f) / 10^6)
   fileIn <- file(f, "r")
   inData <- readLines(fileIn, skipNul = TRUE)
-  numLines <- round(length(inData) / 10^6, digits = 2)
-  numWords <-  round(stri_count_words(inData) / 10^6, digits = 2)
-  df <- rbind(df, data.frame(file = f,
-                             size.MB = fileSize,
-                             lines.M = numLines,
-                             words.M = numWords))
+  df <- rbind(df, data.frame(
+      file = f,
+      file.size.MB = round(file.size(f) / 10^6),
+      num.lines.M = round(length(inData) / 10^6, digits = 2),
+      num.words.M = round(sum(stri_count_words(inData)) / 10^6, digits = 2)
+  ))
   close(fileIn)
 }
 (df)
 ```
 
-## R Markdown
+## Data Analysis
+For analysis I use several tools/libraries  
+*dplyr* - for data manipulation  
+*ggplot2* - plotting and visualising  
+*tm* - text mining library  
+*RWeka* - for splitting text int n-grams  
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Because of the reason only the one third of the text is news and therefore is written without errors (we may expect), the other two thirds are containing errors of any kind one can imagine. We need to deal with that errors, but, firstly to determine those errors.  
+The full dataset is too 'heavy' for an exploratory analysis: tm package cannot build TermDocumentMatrix in the memory straightaway, but splitting the dataset into chunks and incrementally construct all TermDocumentMatrices takes 3 hours (11240.328  seconds correctly). So I take a small sample out of the dataset.  
+Algorithm for sampling will be as follows: reading all three files chunk by chunk (1000 lines each) and randomly take 20 lines out of every chunk. That is representative 2% of all data.  
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+### Preprocessing and tokenizing data points
+1 remove all punctuations marks that follow each other: Twitter feeds contain smiles and, for example, many exclamation marks in a row  
+2 leave only three punctuation marks, that are part of the language: "can't", "i.e.", "left-handed"  
+3 don't make all text in lowercase, because prediction for "Las" should be "Vegas", but not "vegas"  
+4 include stopwords - "to be or not to be" consists fully of stopwords etc.  
+5 set the minimal word length to 1 - see above  
+6 no stemming is used  
+7 don't remove numbers - "Porsche 911", "Elections 2012"  
+8 dataset contains only one sentence in each line, because words from the opposite sides of a dot don't make a bigram (trigram, whatsoever)  
+Actually, the last point decreased by 7% in sample dataset the total number of bigrams only.
+Now, let's have a look at the most frequent bigrams of a sample data.
+```{r echo=TRUE}
+setwd("..")
+corp <- VCorpus(DirSource("data/sample/"))
+nGramTok <- function(x) NGramTokenizer(x, Weka_control(min = 2, max = 2, delimeters = ' \r\n\t,;:"()?!'))
+tdm <- TermDocumentMatrix(corp, list(wordLengths = c(1,Inf),
+                                    tolower = FALSE,
+                                    stopwords = FALSE,
+                                    tokenize = nGramTok))
+(head(findFreqTerms(tdm, 800), 40))
 ```
+"can t", "I m", "I don" and other iterative examinations bring us additional points
+- insert "'" where needed
+- replace shortenings "c" and "u" with "see" and "you" respectively
+- remove "bad" words; a good sample of the list - https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r echo=TRUE}
+setwd("..")
+corp <- VCorpus(DirSource("data/chunks/"))
+
+Terms1 <- customTDM1(corp)
+Terms2 <- customTDMn(corp, 2)
+(head(findFreqTerms(Terms2, 1400), 40))
+Terms3 <- customTDMn(corp, 3)
+Terms4 <- customTDMn(corp, 4)
+```
+As it can be seen, bigrams slightly changed.
+Now it's time to explore core things in frequencies of the most popular ngrams.
+```{r}
+Terms1 <- freqTermsInDF(Terms1)
+Terms2 <- freqTermsInDF(Terms2)
+Terms3 <- freqTermsInDF(Terms3)
+Terms4 <- freqTermsInDF(Terms4)
+Terms1 <- Terms1 %>% top_n(n = 50, wt = freq)
+Terms2 <- Terms2 %>% top_n(n = 50, wt = freq)
+Terms3 <- Terms3 %>% top_n(n = 50, wt = freq)
+Terms4 <- Terms4 %>% top_n(n = 50, wt = freq)
+
+plot1 <- ggplot(Terms1[1:25,], aes(reorder(term, -freq), freq)) +
+         labs(x = "Unigrams", y = "Frequency") +
+         theme(axis.text.x = element_text(angle = 60, size = 8, hjust = 1)) +
+         geom_bar(stat = "identity", fill = "#3050B6")
+plot2 <- ggplot(Terms2[1:25,], aes(reorder(term, -freq), freq)) +
+         labs(x = "Bigrams", y = "Frequency") +
+         theme(axis.text.x = element_text(angle = 60, size = 8, hjust = 1)) +
+         geom_bar(stat = "identity", fill = "#30B650")
+plot3 <- ggplot(Terms3[1:25,], aes(reorder(term, -freq), freq)) +
+         labs(x = "Trigrams", y = "Frequency") +
+         theme(axis.text.x = element_text(angle = 60, size = 8, hjust = 1)) +
+         geom_bar(stat = "identity", fill = "#B65030")
+plot4 <- ggplot(Terms4[1:25,], aes(reorder(term, -freq), freq)) +
+         labs(x = "Four-grams", y = "Frequency") +
+         theme(axis.text.x = element_text(angle = 60, size = 8, hjust = 1)) +
+         geom_bar(stat = "identity", fill = "#B650B6")
+
+grid.arrange(plot1, plot2, plot3, plot4, ncol=2, nrow=2)
+```
+As it was stated above, so-called stopwords are the most frequent and widly used parts of the language, so we cannot afford to ignore them. Another interesting feature is that most frequent bigrams don't consist of the most frequent unigrams. And the most frequent trigrams have almost nothing in common with the most frequent bigrams.  
+
+## Next Steps
+In the next steps I'll build a model to predict a word by its predecessors. I'll find a way to combine frequencies from different ngrams - for now I have no clue how to deal with a case, when, for example, bigram with frequency 300 suggests word "AAA", but four-gram with frequency 80 suggests word "BBB". The resulting algorithm will be deployed as a Shiny App.
