@@ -1,24 +1,7 @@
 # split big 'final' files into small fast-processible chunks
 
-source("./textCleaner.R")
-
-# read censured words
-censured <- ""
-cens <- file("data/censure.txt", "r")
-repeat {
-  line = readLines(cens, n = 1)
-  if ( length(line) == 0 ) {
-    censured <- paste0(censured, ")( |$)")
-    break
-  }
-  if (nchar(censured) == 0)
-    censured <- paste0("( |^)(", line)
-  else
-    censured <- paste0(censured, "|", line)
-}
-close(cens)
-
-
+source("textCleaner.R")
+source("censure.R")
 
 dirPath <- "data/final/en_US/"
 dirOut <- "data/chunks/"
@@ -44,7 +27,7 @@ for (f in filesList) {
     fileOut <- file(paste0(dirOut, "chunk", as.character(chunkNum), ".txt"), "w")
     inData <- readLines(fileIn, n = LPF, skipNul = TRUE)
     linesRead <- length(inData)
-    inData <- textCleaner(inData, censured = censured)
+    inData <- textCleaner(inData, censured = censuredWords())
     writeLines(inData, fileOut)
     close(fileOut)  
     
