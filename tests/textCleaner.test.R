@@ -1,6 +1,6 @@
 setwd("..")
-source("textCleaner.R")
-source("censure.R")
+source("src/textCleaner.R")
+source("src/censure.R")
 require(testthat)
 
 test_that("cleanPatterns regexp", {

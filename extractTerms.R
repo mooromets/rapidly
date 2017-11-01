@@ -2,7 +2,7 @@ library(tm)
 library(RWeka)
 library(dplyr)
 
-source("customTDM.R")
+source("src/customTDM.R")
 
 # get list of directories
 textDir <- "data/chunks/"

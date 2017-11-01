@@ -1,3 +1,5 @@
+# cleaning text 
+
 cleanPatterns <- data.frame(
   pattern = c(
     "[[:punct:]]{2,}", # remove 2+ puctuation marks in a row

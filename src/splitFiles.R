@@ -2,8 +2,8 @@
 # split big 'final' files into small fast-processible chunks
 # also split data into three subsets: training, testing, validating
 
-source("textCleaner.R")
-source("censure.R")
+source("src/textCleaner.R")
+source("src/censure.R")
 
 splitFiles <- function(inPath = "data/final/en_US/",
                        outPath = "data/chunks/",
