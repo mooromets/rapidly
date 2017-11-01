@@ -9,13 +9,8 @@ ctrlList <- list(wordLengths = c(1,Inf),
                  stopwords = FALSE)
 customDelimiters <- ' \r\n\t,;:"()?!' # without ['-.]
 
-# single-word TDM
-customTDM1 <- function (corpus) {
-  TermDocumentMatrix(corpus, ctrlList)
-}
-
 # nGram TDM
-customTDMn <- function (corpus, nGramMin, nGramMax = nGramMin) {
+customTDMn <- function (corpus, nGramMin = 1, nGramMax = nGramMin) {
   nGramTok <- function(x) NGramTokenizer(x, Weka_control(min = nGramMin, 
                                                          max = nGramMax, 
                                               delimiters = customDelimiters))
