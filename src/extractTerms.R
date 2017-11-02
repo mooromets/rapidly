@@ -21,6 +21,9 @@ extractTerms <- function (ngram = 1, chunksDir = "data/chunks/train/"){
     # another al terms
     rightTerms <- freqTermsInDF(customTDMn(corpV, ngram))
     leftTerms <- full_join(leftTerms, rightTerms, by = "term")
+    # merge frequencies columns
+    leftTerms[, 2] <- apply(leftTerms[, -1], 1, sum, na.rm = TRUE)
+    leftTerms <- leftTerms[, 1:2]
     }))
   }
   leftTerms
