@@ -80,5 +80,5 @@ cleanFile <- function(filename)
                       textCleaner(inData, censured = censuredWords()))
   writeLines(trainData, fileOut)
   close(fileOut)  
-  print(st)
+  st
 }
