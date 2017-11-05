@@ -18,17 +18,19 @@ four <- extractTerms(4, "data/chunks/train/")
 print(dim(four))
 
 #save temporal tabels to avoid expansive extracting every time
-write.csv(bi, file = "data/bi.csv")
-write.csv(tri, file = "data/tri.csv")
-write.csv(four, file = "data/four.csv")
+write.csv(bi, file = "data/bi.csv", row.names = FALSE)
+write.csv(tri, file = "data/tri.csv", row.names = FALSE)
+write.csv(four, file = "data/four.csv", row.names = FALSE)
 
-#creating sparse matrices
+#create sparse matrices
 mbi <- sparseTPM(bi)
 print(dim(mbi))
-writeMM(mbi, file = "data/bigrams.mtx")
 mtri <- sparseTPM(tri)
 print(dim(mtri))
-writeMM(mtri, file = "data/trigrams.mtx")
 mfour <- sparseTPM(four)
 print(dim(mfour))
-writeMM(mfour, file = "data/fourgrams.mtx")
+
+#save sparse matrices
+writeMMTPM(mbi, file = "data/bigrams")
+writeMMTPM(mtri, file = "data/trigrams")
+writeMMTPM(mfour, file = "data/fourgrams")

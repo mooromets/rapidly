@@ -95,6 +95,7 @@ tpm2 <- function(input) {
 
 # Term-prediction matrix
 sparseTPM <- function(input) {
+  require(dplyr)
   print(system.time({
   input[, 3:4] <- splitTerm(input) # split terms to predictor and outcome
   #input$V1 <-stemNgram(input$V1) # stemming predictor only
@@ -115,4 +116,23 @@ sparseTPM <- function(input) {
   rownames(spa) = levels(is)
   }))
   spa
+}
+
+writeMMTPM <- function(matrix, filenameWOExtension) {
+  writeMM(matrix, paste0(filenameWOExtension, ".mtx"))
+  write(colnames(matrix), paste0(filenameWOExtension, "cols.csv"), sep="\n")
+  write(rownames(matrix), paste0(filenameWOExtension, "rows.csv"), sep="\n")
+}
+
+readMMTPM <- function(filenameWOExtension) {
+  matrix <- as(readMM(paste0(filenameWOExtension, ".mtx")), "CsparseMatrix")
+  cols <- read.csv(paste0(filenameWOExtension, "cols.csv"), 
+                   stringsAsFactors = FALSE,
+                   header = FALSE)
+  rows <- read.csv(paste0(filenameWOExtension, "rows.csv"), 
+                   stringsAsFactors = FALSE,
+                   header = FALSE)
+  colnames(matrix) <- cols[, 1]
+  rownames(matrix) <- rows[, 1]
+  matrix
 }

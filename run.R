@@ -1,5 +1,6 @@
 library(Matrix)
+source("src/termPredictionMatrix.R")
 
-mbi <- readMM("data/bi-tpm.csv")
-mtri <- readMM("data/tri-tpm.csv")
-mfour <- readMM("data/four-tpm.csv")
+bigrams <- readMMTPM("data/bigrams")
+trigrams <- readMMTPM("data/trigrams")
+fourgrams <- readMMTPM("data/fourgrams")
