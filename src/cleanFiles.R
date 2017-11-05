@@ -31,17 +31,19 @@ splitFiles <- function(inPath = "data/final/en_US/",
   # list input files
   filesList <- paste0(inPath, dir(inPath))
   
+  trainingFilesList <- c()
   chunkNum <- 0
-  cleaningElapsed <- c()
   for (f in filesList) {
     fileIn <- file(f, "r")
     repeat {
-      # create a new file and write lines
       chunkNum <- chunkNum + 1
       #separate dir for every file in train subset
       newDir <- paste0(trainDataDir, as.character(chunkNum), "/")
       dir.create(newDir) 
-      fileOut <- file(paste0(newDir, "chunk", as.character(chunkNum), ".txt"), "wt")
+      # create a new file and write lines
+      newFilename <- paste0(newDir, "chunk", as.character(chunkNum), ".txt")
+      trainingFilesList <- c(trainingFilesList, newFilename)
+      fileOut <- file(newFilename, "wt")
       inData <- readLines(fileIn, n = linesInChunk, skipNul = TRUE)
       # indexes for 3 subsets
       trainIndex <- 1:length(inData)
@@ -50,15 +52,9 @@ splitFiles <- function(inPath = "data/final/en_US/",
       validateIndex <- sample(testIndex, max(10, length(testIndex) * .1))
       testIndex <- setdiff(testIndex, validateIndex)
       # making subsets
-      st <- system.time( {
-        trainData <- textCleaner(inData[trainIndex], 
-                                 censured = censuredWords())
-        testData <- textCleaner(inData[testIndex], 
-                                censured = censuredWords())
-        validateData <- textCleaner(inData[validateIndex], 
-                                    censured = censuredWords())
-      })
-      cleaningElapsed <- c(cleaningElapsed, st[3])
+      trainData <- inData[trainIndex]
+      testData <- inData[testIndex]
+      validateData <- inData[validateIndex]
       writeLines(testData, testFile)
       writeLines(validateData, validateFile)
       writeLines(trainData, fileOut)
@@ -71,7 +67,18 @@ splitFiles <- function(inPath = "data/final/en_US/",
   }
   close(testFile)
   close(validateFile)
-  
-  print(paste("Cleaning elapsed time:", as.character(sum(cleaningElapsed))))
-  print(cleaningElapsed)
+  trainingFilesList
+}
+
+cleanFile <- function(filename)
+{
+  fileIn <- file(filename, "r")
+  inData <- readLines(fileIn)
+  close(fileIn)
+  fileOut <- file(filename, "wt")
+  st <- system.time(trainData <- 
+                      textCleaner(inData, censured = censuredWords()))
+  writeLines(trainData, fileOut)
+  close(fileOut)  
+  print(st)
 }

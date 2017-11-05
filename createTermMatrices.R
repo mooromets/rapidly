@@ -1,13 +1,23 @@
 library(Matrix)
+library(parallel)
 
-source("src/splitFiles.R")
+source("src/cleanFiles.R")
 source("src/extractTerms.R")
 source("src/termPredictionMatrix.R")
+source("src/textCleaner.R")
+source("src/censure.R")
 
-# split into small chunks and clean (on the way) the input data
 inpath <- "data/final/en_US/"
 outpath <- "data/chunks/"
-splitFiles(inpath, outpath)
+
+# split into small chunks and clean (on the way) the input data
+trainFiles <- splitFiles(inpath, outpath)
+
+#going parallel
+cluster <- makeCluster(detectCores())
+clusterExport(cluster, c("textCleaner", "perlSplitPattern", 
+                         "censuredWords", "cleanPatterns"))
+parLapply(cluster, trainFilesSmall, cleanFile)
 
 # get all ngrams from data
 bi <- extractTerms(2, "data/chunks/train/")
