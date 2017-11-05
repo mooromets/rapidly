@@ -11,7 +11,7 @@ extractTerms <- function (ngram = 1, chunksDir = "data/chunks/train/"){
   # read first file
   corpV <- VCorpus(DirSource(filesList[1]))
   # all terms
-  leftTerms <- freqTermsInDF(customTDMn(corpV, ngram))
+  leftTerms <- termsInDF(customTDMn(corpV, ngram))
   }))
   
   for(i in 2:length(filesList)) {
@@ -19,7 +19,7 @@ extractTerms <- function (ngram = 1, chunksDir = "data/chunks/train/"){
     # read next file
     corpV <- VCorpus(DirSource(filesList[i]))
     # another al terms
-    rightTerms <- freqTermsInDF(customTDMn(corpV, ngram))
+    rightTerms <- termsInDF(customTDMn(corpV, ngram))
     leftTerms <- full_join(leftTerms, rightTerms, by = "term")
     # merge frequencies columns
     leftTerms[, 2] <- apply(leftTerms[, -1], 1, sum, na.rm = TRUE)
