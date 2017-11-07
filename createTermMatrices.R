@@ -27,22 +27,16 @@ times <- parLapply(cluster, trainFiles, cleanFile)
 stopCluster(cluster)
 print(Sys.time())
 
-#getting all ngrams
-cluster <- makeCluster(min(3, detectCores()))#, type = "FORK")
-clusterExport(cluster, c("extractTerms", "sparseTPM", "writeMMTPM", "VCorpus",
-                         "customTDMn", "DirSource", "termsInDF", "ctrlList",
-                         "TermDocumentMatrix", "NGramTokenizer", "Weka_control",
-                         "customDelimiters", "full_join", "splitTerm"))
-res <- parLapply(cluster, 2:4, 
-          function(n) {
-            grams <- extractTerms(n, paste0(outpath, "train/"))
-            write.csv(grams, 
-                      file = paste0("data/", as.character(n),"gram.csv"), 
-                      row.names = FALSE)
-            spMtx <- sparseTPM(grams)
-            writeMMTPM(spMtx, file = paste0("data/sparse", as.character(n),"gram"))
-          })
-stopCluster(cluster)
+lapply(4:4,
+      function(n) {
+        grams <- extractTerms(n, paste0(outpath, "train/"))
+        write.csv(grams, 
+                  file = paste0("data/", as.character(n),"gram.csv"), 
+                  row.names = FALSE)
+        spMtx <- sparseTPM(grams)
+        writeMMTPM(spMtx, file = paste0("data/sparse", as.character(n),"gram"))
+      })
+print(Sys.time())
 
 #bi <- read.csv("2gram.csv", stringsAsFactors = FALSE)
 #tri <- read.csv("3gram.csv", stringsAsFactors = FALSE)
