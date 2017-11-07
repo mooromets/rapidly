@@ -54,4 +54,8 @@ textCleaner <- function (x, patterns = cleanPatterns, censured = "") {
   #skip too short sentences
   minSize <- 4 # min size for a sensible sentence 
   x <- x[nchar(x) >= minSize]
+    # TODO refactor
+    require(tm)
+    x <- tolower(x)
+    x <- removeNumbers(x)
 }
