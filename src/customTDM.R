@@ -30,10 +30,7 @@ freqTermsInDF <- function(tdm, lowerBound = 3) {
 
 # get terms in data.frame
 # uses only the first document from TDM
-# NOTE
-# this function does NOT call freqTermsInDF with lowerBound = 1
-# for the reason of speed
-termsInDF <- function(tdm, lowerBound = 3) {
+termsInDF <- function(tdm) {
   df <- data.frame(as.matrix(tdm), stringsAsFactors = FALSE)
   data.frame(term = rownames(df), 
              freq =  df[, 1],
