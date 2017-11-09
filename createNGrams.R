@@ -54,3 +54,10 @@ for (idir in 2:7) { #length(dirList)) {
   print(Sys.time())
   gc()  
 }
+
+write.csv(idsLeft, "data/fullBigramms.csv", row.names = FALSE)
+# filter wrong spelled words
+index <- idsLeft[, 3] > 2
+write.csv(idsLeft[idsLeft[, 3] > 2, ], 
+          "data/cleanBigramms.csv",
+          row.names = FALSE)
