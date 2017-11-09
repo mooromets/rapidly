@@ -39,7 +39,7 @@ for(i in 2:length(dirList)) {
 newDF <- do.call(rbind.data.frame, as.list(hash))
 write.csv(newDF, "data/fullDictionary.csv")
 # filter wrong spelled words
-index <- newDF[, 1] > 2
+index <- newDF[, 1] > 5
 write.csv(data.frame(term = rownames(newDF)[index],
                      freq = newDF[index, 1]), 
           "data/cleanDictionary.csv",
