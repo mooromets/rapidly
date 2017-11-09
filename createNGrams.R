@@ -62,13 +62,14 @@ doJob <- function(N) {
     #gc()  
   }
   
-  write.csv(idsLeft, "data/fullBigramms.csv", row.names = FALSE)
+  outFileName <- paste0("NGramms", as.character(N))
+  
+  write.csv(idsLeft, paste0("data/full", outFileName, ".csv"), row.names = FALSE)
   # filter wrong spelled words
-  write.csv(idsLeft[idsLeft[, 3] > 2, ], 
-            "data/cleanBigramms.csv",
-            row.names = FALSE)
+  idsLeft <- idsLeft[idsLeft[, freqColumn] > 2, ]
+  write.csv(idsLeft, paste0("data/clean", outFileName, ".csv"), row.names = FALSE)
   
   #here sparse matrix code
 }
 
-doJob(2)
+doJob(3)
