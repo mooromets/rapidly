@@ -1,6 +1,7 @@
 library(Matrix)
 library(tm)
 library(dplyr)
+library(parallel)
 
 source("src/customTDM.R")
 
@@ -13,17 +14,16 @@ df <- read.csv("data/cleanDictionary.csv")
 tmpList <- as.list(rownames(df))
 names(tmpList) <- df$term
 term2ID <- list2env(tmpList, hash = TRUE)
-ID2Term <- as.vector(df$term)
+#ID2Term <- as.vector(df$term)
 rm(df)
 rm(tmpList)
 #gc()
 
+#file.remove(dir("data/log/"))
+
 # doJob function makes all work regarding one nGram (bigram/trigram/etc.) 
 #TODO refactor this monsterous function
-doJob <- function(N) {
-  
-  dirList <- paste0(chunksPath, dir(chunksPath))
-
+doJob <- function(dirList, N) {
   # getTermsIds function returns a data.frame containing all terms from the 
   # corpus from input directory
   getTermsIds <- function(dirname) {
@@ -47,29 +47,41 @@ doJob <- function(N) {
   }
   #print(Sys.time())
   idsLeft <- getTermsIds(dirList[1])
+  write.csv(data.frame(x = 0, y = 1), paste0("data/log/", gsub("/", "", dirList[1])))
   termColumns <- c(1:N) # collumns in data frame, that are words and not frequency
   freqColumn <- N+1 # column(s) containing frequency
   #gc()
-  for (idir in 2:5) { #length(dirList)) {
+  for (idir in 2:length(dirList)) {
     idsRight <- getTermsIds(dirList[idir])
     idsLeft <- full_join(idsLeft, 
                          idsRight, 
                          by = paste0("V", as.character(termColumns)))
     idsLeft[, freqColumn] <- apply(idsLeft[, -termColumns], 1, sum, na.rm = TRUE)
     idsLeft <- idsLeft[, c(termColumns, freqColumn)]
-    print(object.size(idsLeft))
-    print(Sys.time())
-    #gc()  
+    write.csv(data.frame(x = 0, y = 1), paste0("data/log/", gsub("/", "", dirList[idir])))
+    #print(object.size(idsLeft))
+    #print(Sys.time())
+    gc()  
   }
   
-  outFileName <- paste0("NGramms", as.character(N))
+  outFileName <- paste0("NGramms", as.character(N), "-", as.character(sample(1:10^6,1)))
   
   write.csv(idsLeft, paste0("data/full", outFileName, ".csv"), row.names = FALSE)
   # filter wrong spelled words
   idsLeft <- idsLeft[idsLeft[, freqColumn] > 2, ]
   write.csv(idsLeft, paste0("data/clean", outFileName, ".csv"), row.names = FALSE)
-  
-  #here sparse matrix code
+  paste0("data/full", outFileName, ".csv")
 }
+sublists <- function(x,n) split(x, cut(seq_along(x), n, labels = FALSE))
 
-doJob(3)
+#get all directories and shuffle them to balance the load
+dirList <- sample(paste0(chunksPath, dir(chunksPath)))
+nThreads <- detectCores() - 1
+subLists <- sublists(dirList, nThreads)
+#create cluster
+cluster <- makeCluster(nThreads)
+clusterExport(cluster, c("VCorpus", "DirSource", "ctrlList", "NGramTokenizer",
+                         "TermDocumentMatrix", "customTDMn", "full_join", 
+                         "customDelimiters", "Weka_control", "term2ID"))
+filenames <- parLapply(cluster, subLists, doJob, 3)
+stopCluster(cluster)
