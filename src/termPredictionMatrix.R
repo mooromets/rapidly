@@ -1,3 +1,4 @@
+library(Matrix)
 
 # split ngram into 2 parts: predictor and outcome
 splitTerm <- function (allTerms) {
@@ -135,4 +136,10 @@ readMMTPM <- function(filenameWOExtension) {
   colnames(matrix) <- cols[, 1]
   rownames(matrix) <- rows[, 1]
   matrix
+}
+
+loadSparseTPM <- function(tpmDF) {
+  sparseMatrix(seq(1, nrow(tdm)),
+               tdm[, ncol(tdm) - 1],
+               x = tdm[, ncol(tdm)])
 }
