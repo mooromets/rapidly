@@ -126,9 +126,12 @@ makeSamples <- function(inPath = "data/final/en_US/",
       testIndex <- setdiff(testIndex, validateIndex)
       
       # make subsets
-      trainData <- sentenceSplit(inData[trainIndex])
-      testData <- sentenceSplit(inData[testIndex])
-      validateData <- sentenceSplit(inData[validateIndex])
+      trainData <- iconv(sentenceSplit(inData[trainIndex]), 
+                         "latin1", "ASCII", sub="")
+      testData <- iconv(sentenceSplit(inData[testIndex]), 
+                        "latin1", "ASCII", sub="")
+      validateData <- iconv(sentenceSplit(inData[validateIndex]), 
+                            "latin1", "ASCII", sub="")
       
       writeLines(testData, testFile)
       writeLines(validateData, validateFile)
