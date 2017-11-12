@@ -1,6 +1,7 @@
 library(tm)
 options(java.parameters = "-Xmx4096m")
 library(RWeka)
+library(dplyr)
 source("src/cleanFiles.R")
 source("src/dictionary.R")
 source("src/cleanCorpus.R")
@@ -59,25 +60,26 @@ for (idir in dirsList) {
   }
 }
 
-#3. read data
-#inputDir <- "./data/final/en_US2/"
-#corp <- VCorpus(DirSource(inputDir))
+# create full TDMs
 
-#4 clean data
-#corp <- tm_map(corp, content_transformer(tolower))
-#corp <- tm_map(corp, content_transformer(removeNumbers))
-#corp <- tm_map(corp, content_transformer(removePunctuation))
+tdmDir <- "data/TDMs/"
 
-#5 create dictionary
-#allTerms <- as.matrix(TermDocumentMatrix(corp)) #  ctrlList <- list(wordLengths = c(1,Inf), tolower = FALSE, stopwords = FALSE)
+fullTdmFiles <- c()
 
-#listTerms <- as.list(allTerms)
-#names(listTerms) <- rownames(allTerms)
-#hash <- list2env(listTerms, hash = TRUE)
-#clear memory
-
-#rm(allTerms)
-#rm(listTerms)
-gc()
-
-
+for (idir in dir(tdmDir)) {
+  partsDirs <- paste0(tdmDir, idir, "/")
+  files <- paste0(partsDirs, dir(partsDirs))
+  leftTDM <- read.csv(files[1])
+  for (i in 2 : length(files)){
+    rightTDM <- read.csv(files[i])
+    freqColIndex <- ncol(leftTDM)
+    joinBy <- colnames(rightTDM)[1 : (freqColIndex - 1)]
+    leftTDM <- full_join(leftTDM, rightTDM, by = joinBy)
+    leftTDM[, freqColIndex] <- apply(leftTDM[, freqColIndex : (freqColIndex + 1)], 
+                                     1, sum, na.rm = TRUE)
+    leftTDM <- leftTDM[-(freqColIndex + 1)]
+  }
+  outFileName <- paste0("data/tdm", idir, ".csv")
+  fullTdmFiles <- c(fullTdmFiles, outFileName)
+  write.csv(leftTDM, paste0(outFileName, row.names = FALSE))
+}
