@@ -48,7 +48,7 @@ createDictionary <- function(dirPath, minFreqThreshold = 3) {
 
 loadDictionaryHash <- function(filePath = cleanDictFile) {
   df <- read.csv(filePath)
-  tmpList <- as.list(rownames(df))
+  tmpList <- as.list(as.numeric(rownames(df)))
   names(tmpList) <- df$term
   list2env(tmpList, hash = TRUE)
 }
