@@ -139,7 +139,7 @@ readMMTPM <- function(filenameWOExtension) {
 }
 
 loadSparseTPM <- function(tpmDF) {
-  sparseMatrix(seq(1, nrow(tdm)),
-               tdm[, ncol(tdm) - 1],
-               x = tdm[, ncol(tdm)])
+  sparseMatrix(tpmDF[, ncol(tpmDF) - 2],
+               tpmDF[, ncol(tpmDF) - 1],
+               x = tpmDF[, ncol(tpmDF)])
 }
