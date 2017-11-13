@@ -1,5 +1,5 @@
 library(tm)
-options(java.parameters = "-Xmx4096m")
+options(java.parameters = "-Xmx6000m")
 library(RWeka)
 library(dplyr)
 source("src/cleanFiles.R")
@@ -16,11 +16,12 @@ trainPath <- paste0(outPath, "train/")
 #create and load dictionary
 createDictionary(trainPath)
 dictHash <- loadDictionaryHash()
+print(paste("Dictionary size: ", as.character(length(dictHash))))
 
 # get and save all nGrams
 gc()
 dirsList <- dir(paste0(outPath, "train/"))
-minWordLength <- 3
+minWordLength <- 1
 for (idir in dirsList) {
   for (N in 2:4) {
     print(paste(idir, as.character(N)))
@@ -32,7 +33,7 @@ for (idir in dirsList) {
     tdm <- TermDocumentMatrix(corp, 
                               control = list(tokenize = nGramTok, 
                                              stopwords = TRUE, 
-                                             wordLengths = c(minTermLength,Inf)))
+                                             wordLengths = c(1, Inf)))
     print(Sys.time()); print("get IDs");
     # convert words into IDs
     mtx <- as.matrix(tdm)

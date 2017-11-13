@@ -22,7 +22,7 @@ createDictionary <- function(dirPath, minFreqThreshold = 3) {
   dirList <- paste0(dirPath, dir(dirPath))
   hash <- new.env(hash = TRUE)
   for(idir in dirList) {
-    mtx <- getTermsInMatrix(idir)
+    mtx <- getTermsInMatrix(idir, list(wordLengths=c(1,Inf)))
     print(paste(idir, " Time:"))
     print(system.time({
       for (j in 1:nrow(mtx)) {
