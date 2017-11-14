@@ -7,33 +7,41 @@ source("src/dictionary.R")
 
 # sample data
 inPath <- "data/final/enus3/"
-outPath <- "data/corpora/"
-makeSamples(inPath, outPath)
+outPathBase <- "data/full1115/"
+outPathCorp <- paste0(outPathBase, "corpora/")
+if (dir.exists(outPathBase)) {
+  file.remove(paste0(outPathBase, dir(outPathBase)))
+} else { 
+  dir.create(outPathBase)
+}
+makeSamples(inPath, outPathCorp)
 
-trainPath <- paste0(outPath, "train/")
+trainPath <- paste0(outPathCorp, "train/")
 
 #create and load dictionary
 createDictionary(trainPath)
-dictHash <- loadDictionaryHash()
+dictHash <- loadDictionaryHash(basePath = outPathBase)
 print(paste("Dictionary size: ", as.character(length(dictHash))))
 
+# prepare dirs
+dirsList <- dir(trainPath)
+nGramsRange <- 2:4
+listOfTDMs <- vector("list", length(nGramsRange))
 # get and save all nGrams
-gc()
-dirsList <- dir(paste0(outPath, "train/"))
-minWordLength <- 1
 for (idir in dirsList) {
-  for (N in 2:4) {
+  for (N in nGramsRange) {
     print(paste(idir, as.character(N)))
-    print(Sys.time()); print("get TDM");
-    corp <- VCorpus(DirSource(paste0(outPath, "train/", idir)))
+    print(Sys.time()); print("read and clean Corpus");
+    corp <- VCorpus(DirSource(paste0(trainPath, idir)))
     corp <- tm_map(corp, content_transformer(cleanText))
+    print(Sys.time()); print("create TDM");
     nGramTok <- function(x) NGramTokenizer(x, Weka_control(min = N, max = N))
     minTermLength <- minWordLength * N + N-1
     tdm <- TermDocumentMatrix(corp, 
                               control = list(tokenize = nGramTok, 
                                              stopwords = TRUE, 
                                              wordLengths = c(1, Inf)))
-    print(Sys.time()); print("get IDs");
+    print(Sys.time()); print("get and save IDs");
     # convert words into IDs
     mtx <- as.matrix(tdm)
     rm(tdm)
@@ -52,26 +60,21 @@ for (idir in dirsList) {
                       as.numeric(row[2])),    
               nrow = 1)
     })))
-    print(Sys.time()); print("save IDs");
     # remove lines with words absent in the dictionary
-    tmpDF <- tmpDF[complete.cases(tmpDF), ] 
-    write.csv(tmpDF, paste0("data/", idir, as.character(N), ".csv" ),
-              row.names = FALSE)
+    tmpDF <- tmpDF[complete.cases(tmpDF), ]
+    tdmFileNAme <- paste0(outPathBase, idir, as.character(N), ".csv" )
+    write.csv(tmpDF, tdmFileNAme, row.names = FALSE)
+    listOfTDMs[[which(nGramsRange == N)]] <- c(listOfTDMs[[which(nGramsRange == N)]], tdmFileNAme)
+    print(Sys.time())
   }
 }
 
 # create full TDMs
-
-tdmDir <- "data/TDMs/"
-
 fullTdmFiles <- c()
-
-for (idir in dir(tdmDir)) {
-  partsDirs <- paste0(tdmDir, idir, "/")
-  files <- paste0(partsDirs, dir(partsDirs))
-  leftTDM <- read.csv(files[1])
-  for (i in 2 : length(files)){
-    rightTDM <- read.csv(files[i])
+for (vecFiles in listOfTDMs) {
+  leftTDM <- read.csv(vecFiles[1])
+  for (i in 2 : length(vecFiles)){
+    rightTDM <- read.csv(vecFiles[i])
     freqColIndex <- ncol(leftTDM)
     joinBy <- colnames(rightTDM)[1 : (freqColIndex - 1)]
     leftTDM <- full_join(leftTDM, rightTDM, by = joinBy)
@@ -79,7 +82,7 @@ for (idir in dir(tdmDir)) {
                                      1, sum, na.rm = TRUE)
     leftTDM <- leftTDM[-(freqColIndex + 1)]
   }
-  outFileName <- paste0("data/tdm", idir, ".csv")
+  outFileName <- paste0(outPathBase, "FULL", vecFiles[1], ".csv")
   fullTdmFiles <- c(fullTdmFiles, outFileName)
   write.csv(leftTDM, outFileName, row.names = FALSE)
 }

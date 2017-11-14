@@ -4,8 +4,8 @@ options(java.parameters = "-Xmx4096m")
 library(RWeka)
 source("src/cleanText.R")
 
-fullDictFile <- "data/fullDictionary.csv"
-cleanDictFile <- "data/cleanDictionary.csv"
+fullDictFile <- "fullDictionary.csv"
+cleanDictFile <- "cleanDictionary.csv"
 
 getTermsInMatrix <- function(dirname, control = list()) {
   print("corp read"); print(Sys.time())
@@ -18,7 +18,7 @@ getTermsInMatrix <- function(dirname, control = list()) {
   as.matrix(tdm)
 }
 
-createDictionary <- function(dirPath, minFreqThreshold = 3) {
+createDictionary <- function(dirPath, outPath, minFreqThreshold = 3) {
   dirList <- paste0(dirPath, dir(dirPath))
   hash <- new.env(hash = TRUE)
   for(idir in dirList) {
@@ -37,23 +37,23 @@ createDictionary <- function(dirPath, minFreqThreshold = 3) {
     }))
   }
   newDF <- do.call(rbind.data.frame, as.list(hash))
-  write.csv(newDF, fullDictFile)
+  write.csv(newDF, paste0(outPath, fullDictFile))
   # filter wrong spelled words
   index <- newDF[, 1] > minFreqThreshold
   write.csv(data.frame(term = rownames(newDF)[index],
                        freq = newDF[index, 1]), 
-            cleanDictFile,
+            paste0(outPath, cleanDictFile),
             row.names = FALSE)
 }
 
-loadDictionaryHash <- function(filePath = cleanDictFile) {
-  df <- read.csv(filePath)
+loadDictionaryHash <- function(filePath = cleanDictFile, basePath = "data/") {
+  df <- read.csv(paste0(basePath, filePath))
   tmpList <- as.list(as.numeric(rownames(df)))
   names(tmpList) <- df$term
   list2env(tmpList, hash = TRUE)
 }
 
-loadDictionaryVect <- function(filePath = cleanDictFile) {
-  df <- read.csv(filePath)
+loadDictionaryVect <- function(filePath = cleanDictFile, basePath = "data/") {
+  df <- read.csv(paste0(basePath, filePath))
   as.vector(df$term)
 }

@@ -4,21 +4,21 @@ library(dplyr)
 source("src/termPredictionMatrix.R")
 source("src/dictionary.R")
 
-dictHash <- loadDictionaryHash()
-dictVec <- loadDictionaryVect()
+dictHash <- loadDictionaryHash(basePath = outPathBase)
+dictVec <- loadDictionaryVect(basePath = outPathBase)
 
 #load TDMs
-bigramTDM <- read.csv("data/tdmparts2.csv")
+bigramTDM <- read.csv(paste0(outPathBase, "FULLen_USblogstxt2.csv"))
 biIDs <- data.frame(V1 = unique(bigramTDM[, 1]))
 biIDs <- cbind(biIDs, id = seq(1, nrow(biIDs)))
 bigramTDM <- right_join(biIDs, bigramTDM, by = c("V1"))
 
-trigramTDM <- read.csv("data/tdmparts3.csv")
+trigramTDM <- read.csv(paste0(outPathBase, "FULLen_USblogstxt3.csv"))
 triIDs <- unique(trigramTDM[, 1:2])
 triIDs <- cbind(triIDs, id = seq(1, nrow(triIDs)))
 trigramTDM <- right_join(triIDs, trigramTDM, by = c("V1", "V2"))
 
-fourgramTDM <- read.csv("data/tdmparts4.csv")
+fourgramTDM <- read.csv(paste0(outPathBase, "FULLen_USblogstxt4.csv"))
 fourIDs <- unique(fourgramTDM[, 1:3])
 fourIDs <- cbind(fourIDs, id = seq(1, nrow(fourIDs)))
 fourgramTDM <- right_join(fourIDs, fourgramTDM, by = c("V1", "V2", "V3"))
