@@ -3,9 +3,8 @@
 library(tm)
 
 removeStandaloneLetters <- function(x) {
-  gsub(pattern = "([^[:alpha:]']|^)([b-hj-z])([^[:alpha:]']|$)", 
-       replacement = "\\1", 
-       x)
+  removeWords(x, c("b", "c", "e", "f", "g", "h", "j", "k", "l",
+                   "p", "q", "r", "u", "v", "w", "x", "y", "z"))  
 }
 
 recoverApostrophe <- function(x) {
@@ -22,10 +21,9 @@ removePuctLeaveApost <- function(x) {
 
 removeConseqApost <- function(x) {
   gsub(pattern = "'{2,}", 
-       replacement = "'", 
+       replacement = "", 
        x)
 }
-
 
 sentenceSplit <- function(x) {
   unlist(strsplit(x, 

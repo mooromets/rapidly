@@ -1,31 +1,32 @@
 library(Matrix)
+library(dplyr)
 
 source("src/termPredictionMatrix.R")
 source("src/dictionary.R")
 
-#dictHash <- loadDictionaryHash()
-#dictVec <- loadDictionaryVect()
+dictHash <- loadDictionaryHash()
+dictVec <- loadDictionaryVect()
 
 #load TDMs
-#bigramTDM <- read.csv("data/tdmparts2.csv")
-#biIDs <- data.frame(V1 = unique(bigramTDM[, 1]))
-#biIDs <- cbind(biIDs, id = seq(1, nrow(biIDs)))
-#bigramTDM <- right_join(biIDs, bigramTDM, by = c("V1"))
+bigramTDM <- read.csv("data/tdmparts2.csv")
+biIDs <- data.frame(V1 = unique(bigramTDM[, 1]))
+biIDs <- cbind(biIDs, id = seq(1, nrow(biIDs)))
+bigramTDM <- right_join(biIDs, bigramTDM, by = c("V1"))
 
-#trigramTDM <- read.csv("data/tdmparts3.csv")
-#triIDs <- unique(trigramTDM[, 1:2])
-#triIDs <- cbind(triIDs, id = seq(1, nrow(triIDs)))
-#trigramTDM <- right_join(triIDs, trigramTDM, by = c("V1", "V2"))
+trigramTDM <- read.csv("data/tdmparts3.csv")
+triIDs <- unique(trigramTDM[, 1:2])
+triIDs <- cbind(triIDs, id = seq(1, nrow(triIDs)))
+trigramTDM <- right_join(triIDs, trigramTDM, by = c("V1", "V2"))
 
-#fourgramTDM <- read.csv("data/tdmparts4.csv")
-#fourIDs <- unique(fourgramTDM[, 1:3])
-#fourIDs <- cbind(fourIDs, id = seq(1, nrow(fourIDs)))
-#fourgramTDM <- right_join(fourIDs, fourgramTDM, by = c("V1", "V2", "V3"))
+fourgramTDM <- read.csv("data/tdmparts4.csv")
+fourIDs <- unique(fourgramTDM[, 1:3])
+fourIDs <- cbind(fourIDs, id = seq(1, nrow(fourIDs)))
+fourgramTDM <- right_join(fourIDs, fourgramTDM, by = c("V1", "V2", "V3"))
 
 #term-prediction matrices
-#biSparseTPM <- loadSparseTPM(bigramTDM)
-#triSparseTPM <- loadSparseTPM(trigramTDM)
-#fourSparseTPM <- loadSparseTPM(fourgramTDM)
+biSparseTPM <- loadSparseTPM(bigramTDM)
+triSparseTPM <- loadSparseTPM(trigramTDM)
+fourSparseTPM <- loadSparseTPM(fourgramTDM)
 
 findNgram <- function(query, tpm, sparseTpm, ngramIDs) {
   matchCols <- colnames(tpm)[1 : (ncol(tpm) - 3)]
@@ -58,4 +59,13 @@ lookUp <- function(query) {
   answer
 }
 
+print(lookUp("a case of"))
 print(lookUp("would mean the"))
+print(lookUp("make me the"))
+print(lookUp("struggling but the"))
+print(lookUp("date at the"))
+print(lookUp("them off and"))
+print(lookUp("in quite some"))
+print(lookUp("eyes with his"))
+print(lookUp("faith during the"))
+print(lookUp("you must be"))
