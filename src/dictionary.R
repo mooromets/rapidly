@@ -27,7 +27,7 @@ createDictionary <- function(dirPath, minFreqThreshold = 3) {
     print(system.time({
       for (j in 1:nrow(mtx)) {
         val <- rownames(mtx)[j]
-        if (exists(val, envir = hash)) {
+        if (exists(val, envir = hash, inherits = FALSE)) {
           hash[[val]] <- hash[[val]] + mtx[j, 1]
         } else {
           hash[[val]] <- mtx[j, 1]
