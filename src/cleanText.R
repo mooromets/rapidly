@@ -15,7 +15,7 @@ recoverApostrophe <- function(x) {
 
 removePuctLeaveApost <- function(x) {
   gsub(pattern = "[^[:alnum:]'[:space:]]", 
-       replacement = "", 
+       replacement = " ", 
        x)
 }
 
