@@ -2,7 +2,7 @@ library(Matrix)
 library(tm)
 options(java.parameters = "-Xmx4096m")
 library(RWeka)
-source("src/cleanCorpus.R")
+source("src/cleanText.R")
 
 fullDictFile <- "data/fullDictionary.csv"
 cleanDictFile <- "data/cleanDictionary.csv"
@@ -11,7 +11,7 @@ getTermsInMatrix <- function(dirname, control = list()) {
   print("corp read"); print(Sys.time())
   corp <- VCorpus(DirSource(dirname))
   print("corp clean"); print(Sys.time())
-  corp <- cleanCorpus(corp)
+  corp <- tm_map(corp, content_transformer(cleanText))
   control$tokenize <- WordTokenizer
   print("TMD construct"); print(Sys.time())
   tdm <- TermDocumentMatrix(corp, control)

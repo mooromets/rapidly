@@ -4,10 +4,9 @@ library(RWeka)
 library(dplyr)
 source("src/cleanFiles.R")
 source("src/dictionary.R")
-source("src/cleanCorpus.R")
 
 # sample data
-inPath <- "data/final/en_US/"
+inPath <- "data/final/enus3/"
 outPath <- "data/corpora/"
 makeSamples(inPath, outPath)
 
@@ -27,7 +26,7 @@ for (idir in dirsList) {
     print(paste(idir, as.character(N)))
     print(Sys.time()); print("get TDM");
     corp <- VCorpus(DirSource(paste0(outPath, "train/", idir)))
-    corp <- cleanCorpus(corp)
+    corp <- tm_map(corp, content_transformer(cleanText))
     nGramTok <- function(x) NGramTokenizer(x, Weka_control(min = N, max = N))
     minTermLength <- minWordLength * N + N-1
     tdm <- TermDocumentMatrix(corp, 
@@ -82,5 +81,5 @@ for (idir in dir(tdmDir)) {
   }
   outFileName <- paste0("data/tdm", idir, ".csv")
   fullTdmFiles <- c(fullTdmFiles, outFileName)
-  write.csv(leftTDM, paste0(outFileName, row.names = FALSE))
+  write.csv(leftTDM, outFileName, row.names = FALSE)
 }
