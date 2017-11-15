@@ -50,13 +50,17 @@ lookUp <- function(query) {
   query <- unlist(strsplit(query, " "))
   if (length(query) == 0) return ("")
   query <- query[(max(length(query) - 3, 1) ) : length(query)]
-  answer <- ""
-  answer <- findNgram(query, fourgramTDM, fourSparseTPM, fourIDs)
-  if (answer == "")
-    answer <- findNgram(query, trigramTDM, triSparseTPM, triIDs)
-  if (answer == "")
-    answer <-findNgram(query, bigramTDM, biSparseTPM, biIDs)
-  answer
+  answerList <- c()
+  for (i in 1:length(query)) {
+    subQuery <- query[i:length(query)]
+    answer <- findNgram(subQuery, fourgramTDM, fourSparseTPM, fourIDs)
+    if (answer == "")
+      answer <- findNgram(subQuery, trigramTDM, triSparseTPM, triIDs)
+    if (answer == "")
+      answer <-findNgram(subQuery, bigramTDM, biSparseTPM, biIDs)
+    answerList <- c(answerList, answer)
+  }
+  answerList
 }
 
 print(lookUp("a case of"))
