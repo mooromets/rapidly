@@ -57,7 +57,7 @@ makeSamples <- function(inPath = "data/final/en_US/",
   close(testFile)
 }
 
-inPath <- "data/final/en_US/"
-outPath <- "data/corpora/"
+#inPath <- "data/final/en_US/"
+#outPath <- "data/corpora/"
 
-makeSamples(inPath, outPath)
+#makeSamples(inPath, outPath)

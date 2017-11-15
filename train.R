@@ -2,11 +2,12 @@ library(tm)
 options(java.parameters = "-Xmx6000m")
 library(RWeka)
 library(dplyr)
-source("src/cleanFiles.R")
+source("src/cleanText.R")
 source("src/dictionary.R")
+source("makeSamples.R")
 
 # sample data
-inPath <- "data/final/enus3/"
+inPath <- "data/final/en_US/"
 outPathBase <- "data/full1115/"
 outPathCorp <- paste0(outPathBase, "corpora/")
 if (dir.exists(outPathBase)) {
@@ -19,7 +20,7 @@ makeSamples(inPath, outPathCorp)
 trainPath <- paste0(outPathCorp, "train/")
 
 #create and load dictionary
-createDictionary(trainPath)
+createDictionary(trainPath, outPath = outPathBase)
 dictHash <- loadDictionaryHash(basePath = outPathBase)
 print(paste("Dictionary size: ", as.character(length(dictHash))))
 
@@ -36,7 +37,6 @@ for (idir in dirsList) {
     corp <- tm_map(corp, content_transformer(cleanText))
     print(Sys.time()); print("create TDM");
     nGramTok <- function(x) NGramTokenizer(x, Weka_control(min = N, max = N))
-    minTermLength <- minWordLength * N + N-1
     tdm <- TermDocumentMatrix(corp, 
                               control = list(tokenize = nGramTok, 
                                              stopwords = TRUE, 
@@ -73,16 +73,18 @@ for (idir in dirsList) {
 fullTdmFiles <- c()
 for (vecFiles in listOfTDMs) {
   leftTDM <- read.csv(vecFiles[1])
-  for (i in 2 : length(vecFiles)){
-    rightTDM <- read.csv(vecFiles[i])
-    freqColIndex <- ncol(leftTDM)
-    joinBy <- colnames(rightTDM)[1 : (freqColIndex - 1)]
-    leftTDM <- full_join(leftTDM, rightTDM, by = joinBy)
-    leftTDM[, freqColIndex] <- apply(leftTDM[, freqColIndex : (freqColIndex + 1)], 
-                                     1, sum, na.rm = TRUE)
-    leftTDM <- leftTDM[-(freqColIndex + 1)]
+  if(length(vecFiles) > 1){
+    for (i in 2 : length(vecFiles)){
+      rightTDM <- read.csv(vecFiles[i])
+      freqColIndex <- ncol(leftTDM)
+      joinBy <- colnames(rightTDM)[1 : (freqColIndex - 1)]
+      leftTDM <- full_join(leftTDM, rightTDM, by = joinBy)
+      leftTDM[, freqColIndex] <- apply(leftTDM[, freqColIndex : (freqColIndex + 1)], 
+                                       1, sum, na.rm = TRUE)
+      leftTDM <- leftTDM[-(freqColIndex + 1)]
+    }
   }
-  outFileName <- paste0(outPathBase, "FULL", vecFiles[1], ".csv")
+  outFileName <- paste0(gsub(pattern = "[.]", replacement = "FULL.", vecFiles[1]))
   fullTdmFiles <- c(fullTdmFiles, outFileName)
   write.csv(leftTDM, outFileName, row.names = FALSE)
 }
