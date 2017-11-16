@@ -12,7 +12,8 @@ getTermsInMatrix <- function(dirname, control = list()) {
   corp <- VCorpus(DirSource(dirname))
   print("corp clean"); print(Sys.time())
   corp <- tm_map(corp, content_transformer(cleanText))
-  control$tokenize <- WordTokenizer
+  wTok <- function(x) WordTokenizer(x, Weka_control(delimiters = leaveApost))
+  control$tokenize <- wTok
   print("TMD construct"); print(Sys.time())
   tdm <- TermDocumentMatrix(corp, control)
   as.matrix(tdm)

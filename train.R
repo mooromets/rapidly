@@ -8,14 +8,15 @@ source("makeSamples.R")
 
 # sample data
 inPath <- "data/final/en_US/"
-outPathBase <- "data/full1115/"
+outPathBase <- "data/"
+leaveApost <- ' \r\n\t.,;:"()?!'
 outPathCorp <- paste0(outPathBase, "corpora/")
 if (dir.exists(outPathBase)) {
   file.remove(paste0(outPathBase, dir(outPathBase)))
 } else { 
   dir.create(outPathBase)
 }
-makeSamples(inPath, outPathCorp)
+#makeSamples(inPath, outPathCorp)
 
 trainPath <- paste0(outPathCorp, "train/")
 
@@ -36,7 +37,8 @@ for (idir in dirsList) {
     corp <- VCorpus(DirSource(paste0(trainPath, idir)))
     corp <- tm_map(corp, content_transformer(cleanText))
     print(Sys.time()); print("create TDM");
-    nGramTok <- function(x) NGramTokenizer(x, Weka_control(min = N, max = N))
+    nGramTok <- function(x) NGramTokenizer(x, Weka_control(min = N, max = N, 
+                                                           delimiters = leaveApost))
     tdm <- TermDocumentMatrix(corp, 
                               control = list(tokenize = nGramTok, 
                                              stopwords = TRUE, 
