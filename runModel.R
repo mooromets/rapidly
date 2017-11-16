@@ -31,34 +31,36 @@ fourSparseTPM <- loadSparseTPM(fourgramTDM)
 findNgram <- function(query, tpm, sparseTpm, ngramIDs) {
   matchCols <- colnames(tpm)[1 : (ncol(tpm) - 3)]
   if(length(query) !=  length(matchCols)) #too short query
-    return ("")
+    return (NULL)
   queryIDs <- sapply(query, function(x) dictHash[[x]])
   if(length(unlist(queryIDs)) !=  length(matchCols)) #NULLs introduced
-    return ("")
+    return (NULL)
   require(dplyr)
   fCond <- paste(sapply(seq_along(matchCols), 
                      function(i) paste(matchCols[i], " == ", queryIDs[i])), 
               collapse = " & ")
   res <- filter_(ngramIDs, fCond)
-  if (nrow(res) > 0)
-    return(dictVec[which.max(sparseTpm[as.numeric(res[ncol(res)]), ])])
+  if (nrow(res) > 0) {
+    max <- order(sparseTpm[as.numeric(res[ncol(res)]), ], decreasing = TRUE)[1:5]
+    return(c(unlist(sapply(max, function(x) dictVec[x] ))))
+  }
   else 
-    return("")
+    return(NULL)
 }
 
 lookUp <- function(query) {
   query <- unlist(strsplit(query, " "))
-  if (length(query) == 0) return ("")
+  if (length(query) == 0) return (NULL)
   query <- query[(max(length(query) - 3, 1) ) : length(query)]
-  answerList <- c()
+  answerList <- list()
   for (i in 1:length(query)) {
     subQuery <- query[i:length(query)]
     answer <- findNgram(subQuery, fourgramTDM, fourSparseTPM, fourIDs)
-    if (answer == "")
+    if (length(answer) == 0)
       answer <- findNgram(subQuery, trigramTDM, triSparseTPM, triIDs)
-    if (answer == "")
+    if (length(answer) == 0)
       answer <-findNgram(subQuery, bigramTDM, biSparseTPM, biIDs)
-    answerList <- c(answerList, answer)
+    answerList[[i]] <- answer
   }
   answerList
 }
