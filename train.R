@@ -5,6 +5,7 @@ library(dplyr)
 source("src/cleanText.R")
 source("src/dictionary.R")
 source("makeSamples.R")
+source("src/customTDM.R")
 
 # sample data
 inPath <- "data/final/en_US/"
@@ -37,16 +38,8 @@ for (idir in dirsList) {
     corp <- VCorpus(DirSource(paste0(trainPath, idir)))
     corp <- tm_map(corp, content_transformer(cleanText))
     print(Sys.time()); print("create TDM");
-    nGramTok <- function(x) NGramTokenizer(x, Weka_control(min = N, max = N, 
-                                                           delimiters = leaveApost))
-    tdm <- TermDocumentMatrix(corp, 
-                              control = list(tokenize = nGramTok, 
-                                             stopwords = TRUE, 
-                                             wordLengths = c(1, Inf)))
-    print(Sys.time()); print("get and save IDs");
-    # convert words into IDs
-    mtx <- as.matrix(tdm)
-    rm(tdm)
+    mtx <- as.matrix(ngramTdm(corp, ngram = N))
+    # convert words into IDs    
     # remove phrases with a low frequency
     idxFreq <- as.vector(mtx[, 1] > 1)
     tmpDF <- data.frame(term = rownames(mtx)[idxFreq], 

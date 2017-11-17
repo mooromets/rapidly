@@ -2,6 +2,8 @@ require(testthat)
 setwd("..")
 source("src/cleanText.R")
 
+context("text cleaning")
+
 test_that("removeStandaloneLetters()", {
   expect_equal(removeStandaloneLetters("a b c d e h i j"), "a   d   i ")
   expect_equal(removeStandaloneLetters(" a i "), " a i ")

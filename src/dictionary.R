@@ -3,20 +3,15 @@ library(tm)
 options(java.parameters = "-Xmx4096m")
 library(RWeka)
 source("src/cleanText.R")
+source("src/customTDM.R")
 
 fullDictFile <- "fullDictionary.csv"
 cleanDictFile <- "cleanDictionary.csv"
 
 getTermsInMatrix <- function(dirname, control = list()) {
-  print("corp read"); print(Sys.time())
   corp <- VCorpus(DirSource(dirname))
-  print("corp clean"); print(Sys.time())
   corp <- tm_map(corp, content_transformer(cleanText))
-  wTok <- function(x) WordTokenizer(x, Weka_control(delimiters = leaveApost))
-  control$tokenize <- wTok
-  print("TMD construct"); print(Sys.time())
-  tdm <- TermDocumentMatrix(corp, control)
-  as.matrix(tdm)
+  as.matrix(ngramTdm(corp))
 }
 
 createDictionary <- function(dirPath, outPath, minFreqThreshold = 3) {
