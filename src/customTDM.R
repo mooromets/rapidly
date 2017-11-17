@@ -9,6 +9,6 @@ ngramTdm <- function (corpus, ngram = 1, minTermLen = 1, minBound = 1, delims = 
   ctrlList <- list(wordLengths = c(minTermLen, Inf),
                    tokenize = nGramTok,
                    tolower = FALSE,
-                   local = c(minBound, Inf))
+                   bounds = list(local = c(minBound, Inf)))
   TermDocumentMatrix(corpus, ctrlList)
 }
