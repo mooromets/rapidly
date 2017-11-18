@@ -8,20 +8,21 @@ source("src/customTDM.R")
 fullDictFile <- "fullDictionary.csv"
 cleanDictFile <- "cleanDictionary.csv"
 
-getTermsInMatrix <- function(dirname, control = list()) {
+getTermsInMatrix <- function(dirname) {
   corp <- VCorpus(DirSource(dirname))
   corp <- tm_map(corp, content_transformer(cleanText))
   as.matrix(ngramTdm(corp))
 }
 
 createDictionary <- function(dirPath, outPath, minFreqThreshold = 3) {
-  dirList <- paste0(dirPath, dir(dirPath))
   hash <- new.env(hash = TRUE)
-  for(idir in dirList) {
-    mtx <- getTermsInMatrix(idir, list(wordLengths=c(1,Inf)))
+  for(idir in paste0(dirPath, dir(dirPath))) {
+    if (!file.info(idir)$isdir) next # not a directory
+    if (length(dir(idir)) == 0) next # empty directory
+    mtx <- getTermsInMatrix(idir)
     print(paste(idir, " Time:"))
     print(system.time({
-      for (j in 1:nrow(mtx)) {
+      for (j in seq_len(nrow(mtx))) {
         val <- rownames(mtx)[j]
         if (exists(val, envir = hash, inherits = FALSE)) {
           hash[[val]] <- hash[[val]] + mtx[j, 1]
@@ -33,7 +34,6 @@ createDictionary <- function(dirPath, outPath, minFreqThreshold = 3) {
     }))
   }
   newDF <- do.call(rbind.data.frame, as.list(hash))
-  write.csv(newDF, paste0(outPath, fullDictFile))
   # filter wrong spelled words
   index <- newDF[, 1] > minFreqThreshold
   write.csv(data.frame(term = rownames(newDF)[index],
