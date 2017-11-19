@@ -3,7 +3,7 @@ library(tm)
 options(java.parameters = "-Xmx4096m")
 library(RWeka)
 source("src/cleanText.R")
-source("src/customTDM.R")
+source("src/termMatrixOps.R")
 
 fullDictFile <- "fullDictionary.csv"
 cleanDictFile <- "cleanDictionary.csv"

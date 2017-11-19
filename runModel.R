@@ -1,7 +1,7 @@
 library(Matrix)
 library(dplyr)
 
-source("src/termPredictionMatrix.R")
+source("src/termMatrixOps.R")
 source("src/dictionary.R")
 
 dictHash <- loadDictionaryHash(basePath = outPathBase)
@@ -64,14 +64,3 @@ lookUp <- function(query) {
   }
   answerList
 }
-
-print(lookUp("a case of"))
-print(lookUp("would mean the"))
-print(lookUp("make me the"))
-print(lookUp("struggling but the"))
-print(lookUp("date at the"))
-print(lookUp("them off and"))
-print(lookUp("in quite some"))
-print(lookUp("eyes with his"))
-print(lookUp("faith during the"))
-print(lookUp("you must be"))

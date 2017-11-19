@@ -4,8 +4,8 @@ library(RWeka)
 library(dplyr)
 source("src/cleanText.R")
 source("src/dictionary.R")
-source("makeSamples.R")
-source("src/customTDM.R")
+source("src/makeSamples.R")
+source("src/termMatrixOps.R")
 
 # sample data
 inPath <- "data/final/en_US/"

@@ -1,6 +1,6 @@
 require(testthat)
 setwd("..")
-source("src/customTDM.R")
+source("src/termMatrixOps.R")
 
 context("Term-Document Matrix creation")
 

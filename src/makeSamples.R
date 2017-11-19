@@ -1,4 +1,4 @@
-#make train, test, validate samples
+#make train, test and validate samples
 
 makeSamples <- function(inPath = "data/final/en_US/", 
                         outPath = "data/corpora/") 
@@ -57,7 +57,27 @@ makeSamples <- function(inPath = "data/final/en_US/",
   close(testFile)
 }
 
-#inPath <- "data/final/en_US/"
-#outPath <- "data/corpora/"
-
-#makeSamples(inPath, outPath)
+#create a small sample for explorations and debugging
+createSmallSample <- function (inputPath = "data/final/en_US/",
+                               outputFile = "data/small_sample.txt",
+                               outputSizeRate = .02)
+{
+  filesList <- paste0(inputPath, dir(inputPath))
+  fileOut <- file(outputFile, "w")
+  
+  for (f in filesList) {
+    fileIn <- file(f, "r")
+    repeat {
+      chunkSize = 1000
+      inData <- readLines(fileIn, n = chunkSize, skipNul = TRUE)
+      outData <- sample(inData, chunkSize * outputSizeRate)
+      writeLines(outData, fileOut)
+      
+      if (length(inData) != chunkSize) {
+        break
+      }
+    }
+    close(fileIn)
+  }  
+  close(fileOut)
+}  
