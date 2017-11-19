@@ -4,5 +4,5 @@ source("src/modelData.R")
 source("src/models.R")
 source("src/termMatrixOps.R")
 
-print(lookUp("take a look", gatherFUN, maxFUN, sparseTpmList, ngramTdmList, 
+print(lookUp("take a look", choose3top, fiveMostProb, sparseTpmList, ngramTdmList, 
              idsList, dictHash, dictVec))

@@ -63,7 +63,7 @@ findNgram <- function(query, rowFUN, tpm, sparseTpm, ngramIDs, dictHash, dictVec
                  collapse = " & ")
   res <- filter_(ngramIDs, fCond)
   if (nrow(res) > 0) {
-    return (rowFUN(sparseTpm[as.numeric(res[ncol(res)]), ]))
+    return (rowFUN(sparseTpm[as.numeric(res[ncol(res)]), ], dictVec))
   }
   else 
     return(NULL)
