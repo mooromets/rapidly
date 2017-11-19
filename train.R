@@ -9,7 +9,7 @@ source("src/termMatrixOps.R")
 
 # sample data
 inPath <- "data/final/en_US/"
-outPathBase <- "data/"
+outPathBase <- "data/full1115/"
 leaveApost <- ' \r\n\t.,;:"()?!'
 outPathCorp <- paste0(outPathBase, "corpora/")
 if (dir.exists(outPathBase)) {

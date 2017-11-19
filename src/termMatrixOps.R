@@ -40,3 +40,62 @@ loadSparseTPM <- function(tpmDF) {
                tpmDF[, ncol(tpmDF) - 1],
                x = tpmDF[, ncol(tpmDF)])
 }
+
+#'
+#' @param query
+#' @param rowFUN Returns vector of most probable next words in a specific ngram-matrix
+#' @param tpm
+#' @param sparseTpm
+#' @param ngramIDs
+#' @param dictHash
+#' @param dictVec
+#'
+findNgram <- function(query, rowFUN, tpm, sparseTpm, ngramIDs, dictHash, dictVec) {
+  matchCols <- colnames(tpm)[1 : (ncol(tpm) - 3)]
+  if(length(query) !=  length(matchCols)) #too short query
+    return (NULL)
+  queryIDs <- sapply(query, function(x) dictHash[[x]])
+  if(length(unlist(queryIDs)) !=  length(matchCols)) #NULLs introduced
+    return (NULL)
+  require(dplyr)
+  fCond <- paste(sapply(seq_along(matchCols), 
+                        function(i) paste(matchCols[i], " == ", queryIDs[i])), 
+                 collapse = " & ")
+  res <- filter_(ngramIDs, fCond)
+  if (nrow(res) > 0) {
+    return (rowFUN(sparseTpm[as.numeric(res[ncol(res)]), ]))
+  }
+  else 
+    return(NULL)
+}
+
+
+#' Get a prediction of the next word
+#' 
+#' @param query An input phrase
+#' @param resFUN Compells the result from the list of results obtained from single calls to each ngram-matrix
+#' @param rowFUN Returns vector of most probable next words in a specific ngram-matrix
+#' @param sparseTpmList
+#' @param ngramTdmList
+#' @param idsList
+#' @param dictHash 
+#' @param dictVec
+#' @return A vector of three most probable next words
+lookUp <- function(query, resFUN, rowFUN, sparseTpmList, ngramTdmList, idsList, 
+                   dictHash, dictVec) {
+  if (length(sparseTpmList) == 0) 
+    return (NULL)
+  query <- unlist(strsplit(query, " "))
+  if (length(query) == 0) 
+    return (NULL)
+  answerList <- list()
+  for (i in seq_along(sparseTpmList)) {
+    if (i > length(query)) 
+      break
+    subQuery <- query[(length(query) - (i - 1)) : length(query)]
+    answerList[[i]] <- findNgram(subQuery, rowFUN, ngramTdmList[[i]], 
+                                 sparseTpmList[[i]], idsList[[i]], dictHash, 
+                                 dictVec)
+  }
+  resFUN(answerList)
+}
