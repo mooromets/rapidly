@@ -4,7 +4,7 @@ outPathBase = "data/full1119/"
 source("src/models.R")
 source("src/termMatrixOps.R")
 
-getNextWord <- function(term) {
+getNextWord <- function(term, ...) {
   lookUp(term, stupidBackoff, fiveMostProb, sparseTpmList, ngramTdmList, 
-             idsList, dictHash, dictVec)
+             idsList, dictHash, dictVec, ...)
 }

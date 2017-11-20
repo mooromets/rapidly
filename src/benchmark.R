@@ -4,8 +4,8 @@ source("src/cleanText.R")
 source("src/modeling.R")
 
 #open file
-textFile <- file(paste0(outPathBase, "corpora/test/testChunk.txt"), "rt")
-text <- readLines(textFile, n = 5000)
+textFile <- file(paste0(outPathBase, "corpora/validate/validateChunk.txt"), "rt")
+text <- readLines(textFile)
 close(textFile)
 
 text <- cleanText(text)
@@ -32,7 +32,6 @@ benchmark <- function(text, ngrams, FUN, ...) {
   hitCountTop3 <- 0
   hitCountTop1 <- 0
   totalCount <- 0
-  check <- 1
   time <- system.time({
     for (line in text) { # for each line in a text
       #print(line)
@@ -47,12 +46,6 @@ benchmark <- function(text, ngrams, FUN, ...) {
       score <- score + sum(4 - rank)
       hitCountTop3 <- hitCountTop3 + sum(rank < 4)
       hitCountTop1 <- hitCountTop1 + sum(rank == 1)
-      if (round(log(totalCount)) > check) {
-        check <- round(log(totalCount))
-        print(totalCount)
-        print(Sys.time())
-      }
-      if (totalCount > 5000) break
     }
   })
   print(time)
@@ -72,4 +65,7 @@ benchmark <- function(text, ngrams, FUN, ...) {
 }
 
 # call
-benchmark (text, 5, getNextWord)
+sapply(c(.2, .3, .4, .5, .6, .8, 1.1, 1.5, 2),
+       function(lam) {
+         benchmark (text, 5, getNextWord, lam)
+       })

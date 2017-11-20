@@ -50,7 +50,7 @@ loadSparseTPM <- function(tpmDF) {
 #' @param dictHash
 #' @param dictVec
 #'
-findNgram <- function(queryIDs, rowFUN, tpm, sparseTpm, ngramIDs, dictHash, dictVec) {
+findNgram <- function(queryIDs, rowFUN, tpm, sparseTpm, ngramIDs, dictVec) {
   matchCols <- colnames(tpm)[1 : (ncol(tpm) - 3)]
   if(length(queryIDs) !=  length(matchCols)) #too short query
     return (NULL)
@@ -79,7 +79,7 @@ findNgram <- function(queryIDs, rowFUN, tpm, sparseTpm, ngramIDs, dictHash, dict
 #' @param dictVec
 #' @return A vector of three most probable next words
 lookUp <- function(query, resFUN, rowFUN, sparseTpmList, ngramTdmList, idsList, 
-                   dictHash, dictVec) {
+                   dictHash, dictVec, lambda) {
   if (length(sparseTpmList) == 0) 
     return (NULL)
   query <- unlist(strsplit(as.character(query), " "))
@@ -93,8 +93,7 @@ lookUp <- function(query, resFUN, rowFUN, sparseTpmList, ngramTdmList, idsList,
       break
     subQuery <- queryIDs[(length(queryIDs) - (i - 1)) : length(queryIDs)]
     answerList[[i]] <- findNgram(subQuery, rowFUN, ngramTdmList[[i]], 
-                                 sparseTpmList[[i]], idsList[[i]], dictHash, 
-                                 dictVec)
+                                 sparseTpmList[[i]], idsList[[i]], dictVec)
   }
-  resFUN(answerList)
+  resFUN(answerList, lambda)
 }

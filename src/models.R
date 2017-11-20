@@ -32,11 +32,11 @@ choose3top <- function(probList) {
   return(res)
 }
 
-stupidBackoff <- function(probList) {
+stupidBackoff <- function(probList, lambda = 0.4) {
   #concatenate all results
   all <- c()
   for (i in seq_along(probList)) {
-    all <- c(all, probList[[i]] * 0.4^(i-1))
+    all <- c(all, probList[[i]] * lambda^(i-1))
   }
   res <- c()
   for (i in seq_len(3)) {
