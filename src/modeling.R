@@ -4,5 +4,7 @@ source("src/modelData.R")
 source("src/models.R")
 source("src/termMatrixOps.R")
 
-print(lookUp("take a look", choose3top, fiveMostProb, sparseTpmList, ngramTdmList, 
-             idsList, dictHash, dictVec))
+getNextWord <- function(term) {
+  lookUp(term, choose3top, fiveMostProb, sparseTpmList, ngramTdmList, 
+             idsList, dictHash, dictVec)
+}

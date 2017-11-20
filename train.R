@@ -9,7 +9,7 @@ source("src/termMatrixOps.R")
 
 # sample data
 inPath <- "data/final/en_US/"
-outPathBase <- "data/full1115/"
+outPathBase <- "data/full1119/"
 leaveApost <- ' \r\n\t.,;:"()?!'
 outPathCorp <- paste0(outPathBase, "corpora/")
 if (dir.exists(outPathBase)) {
@@ -17,7 +17,7 @@ if (dir.exists(outPathBase)) {
 } else { 
   dir.create(outPathBase)
 }
-#makeSamples(inPath, outPathCorp)
+makeSamples(inPath, outPathCorp)
 
 trainPath <- paste0(outPathCorp, "train/")
 
@@ -28,7 +28,7 @@ print(paste("Dictionary size: ", as.character(length(dictHash))))
 
 # prepare dirs
 dirsList <- dir(trainPath)
-nGramsRange <- 2:4
+nGramsRange <- 2:5
 listOfTDMs <- vector("list", length(nGramsRange))
 # get and save all nGrams
 for (idir in dirsList) {
