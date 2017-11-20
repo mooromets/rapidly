@@ -50,12 +50,9 @@ loadSparseTPM <- function(tpmDF) {
 #' @param dictHash
 #' @param dictVec
 #'
-findNgram <- function(query, rowFUN, tpm, sparseTpm, ngramIDs, dictHash, dictVec) {
+findNgram <- function(queryIDs, rowFUN, tpm, sparseTpm, ngramIDs, dictHash, dictVec) {
   matchCols <- colnames(tpm)[1 : (ncol(tpm) - 3)]
-  if(length(query) !=  length(matchCols)) #too short query
-    return (NULL)
-  queryIDs <- sapply(query, function(x) dictHash[[x]])
-  if(length(unlist(queryIDs)) !=  length(matchCols)) #NULLs introduced
+  if(length(queryIDs) !=  length(matchCols)) #too short query
     return (NULL)
   require(dplyr)
   fCond <- paste(sapply(seq_along(matchCols), 
@@ -85,14 +82,16 @@ lookUp <- function(query, resFUN, rowFUN, sparseTpmList, ngramTdmList, idsList,
                    dictHash, dictVec) {
   if (length(sparseTpmList) == 0) 
     return (NULL)
-  query <- unlist(strsplit(query, " "))
+  query <- unlist(strsplit(as.character(query), " "))
   if (length(query) == 0) 
     return (NULL)
+  query <- query[nchar(query) > 0]
+  queryIDs <- unlist(sapply(query, function(x) dictHash[[x]]))
   answerList <- list()
   for (i in seq_along(sparseTpmList)) {
-    if (i > length(query)) 
+    if (i > length(queryIDs)) 
       break
-    subQuery <- query[(length(query) - (i - 1)) : length(query)]
+    subQuery <- queryIDs[(length(queryIDs) - (i - 1)) : length(queryIDs)]
     answerList[[i]] <- findNgram(subQuery, rowFUN, ngramTdmList[[i]], 
                                  sparseTpmList[[i]], idsList[[i]], dictHash, 
                                  dictVec)

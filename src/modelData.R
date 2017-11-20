@@ -24,7 +24,7 @@ fourIDs <- cbind(fourIDs, id = seq(1, nrow(fourIDs)))
 fourgramTDM <- right_join(fourIDs, fourgramTDM, by = c("V1", "V2", "V3"))
 
 fivegramTDM <- read.csv(paste0(outPathBase, "en_USblogstxt5FULL.csv"))
-fiveIDs <- unique(fivegramTDM[, 1:3])
+fiveIDs <- unique(fivegramTDM[, 1:4])
 fiveIDs <- cbind(fiveIDs, id = seq(1, nrow(fiveIDs)))
 fivegramTDM <- right_join(fiveIDs, fivegramTDM, by = c("V1", "V2", "V3", "V4"))
 

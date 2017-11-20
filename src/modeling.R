@@ -1,10 +1,10 @@
-outPathBase = "data/full1115/"
+outPathBase = "data/full1119/"
 
-source("src/modelData.R")
+#source("src/modelData.R")
 source("src/models.R")
 source("src/termMatrixOps.R")
 
 getNextWord <- function(term) {
-  lookUp(term, choose3top, fiveMostProb, sparseTpmList, ngramTdmList, 
+  lookUp(term, stupidBackoff, fiveMostProb, sparseTpmList, ngramTdmList, 
              idsList, dictHash, dictVec)
 }

@@ -31,3 +31,20 @@ choose3top <- function(probList) {
   }
   return(res)
 }
+
+stupidBackoff <- function(probList) {
+  #concatenate all results
+  all <- c()
+  for (i in seq_along(probList)) {
+    all <- c(all, probList[[i]] * 0.4^(i-1))
+  }
+  res <- c()
+  for (i in seq_len(3)) {
+    maxIdx <- which.max(all)
+    # add this max to result
+    res <- c(res, names(all)[maxIdx])
+    # remove all apearance of this word from all 
+    all <- all[names(all) != names(all)[maxIdx]]
+  }
+  return(res)
+}
