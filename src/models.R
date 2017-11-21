@@ -7,11 +7,23 @@ maxFUN <- function(row, dictVec) {
 
 gatherFUN <- function (x) x
 
+#'
+#' get 5 values from row with the highest probability
+#' @param row a input vector with frequencies of words
+#' @param dictVec dictionary with words
+#' @return a numeric vector of 5 probabilities with their words as names 
+#'
 fiveMostProb <- function(row, dictVec) {
+  if (sum(row) <= 0) return (NULL)
   row <- row / sum(row)
   max5 <- order(row, decreasing = TRUE)[1:5]
   result <- row[max5]
-  names(result) <- c(unlist(sapply(max5, function(x) dictVec[x] )))
+  names(result) <- c(unlist(sapply(max5, 
+                                   function(x) {ifelse(is.element(x,  dictVec),
+                                                       dictVec[x],
+                                                       NULL)
+                                                }
+                      )))
   result
 }
 
