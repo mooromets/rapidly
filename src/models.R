@@ -32,7 +32,7 @@ choose3top <- function(probList) {
   return(res)
 }
 
-stupidBackoff <- function(probList, lambda = 0.4) {
+stupidBackoff <- function(probList, lambda = 0.5) {
   if (length(probList) == 0) return(c("the", "on", "a"))
   #concatenate all results
   all <- c()

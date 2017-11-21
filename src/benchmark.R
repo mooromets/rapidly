@@ -1,49 +1,77 @@
 # benchmark functions
 
 source("src/cleanText.R")
-source("src/modeling.R")
+source("src/common.R")
 
-#open file
-textFile <- file(paste0(outPathBase, "corpora/test/testChunk.txt"), "rt")
-text <- readLines(textFile)
-close(textFile)
+#' 
+#' reads, cleans and shiffles text from test file
+#' 
+#' @param seed to be used for shuffling
+#' @param filname filename
+#' @return text as character vector
+#' 
+benchmarkText <- function(seed = 23456, filename = "") {
+  fname <- ifelse(nchar(filename), 
+                  paste0(outPathBase, "corpora/test/testChunk.txt"),
+                  filename)
+  textFile <- file(fname, "rt")
+  text <- readLines(textFile)
+  close(textFile)
+  text <- cleanText(text)
+  set.seed(seed)
+  # shuffle text because benchmark is stopped by timer, therefore
+  # different parts of text could be processed
+  sample(text, length(text))
+}
 
-text <- cleanText(text)
-text <- sample(text, length(text))
-
-allTerms <- function (line, ngrams) {
+#'
+#' creates data.frame that contains phrases from line with their corresponding prediction 
+#'
+#' @param line character input
+#' @return data.frame with 2 columns: predictor - prediction
+#' 
+line2TermsDF <- function (line) {
+  maxWC <- 10 # maximum words count in a single predictor
   terms <- c()
   outcome <- c()
-  for (len in ngrams) {
-    lineVec <- unlist(strsplit(line, " "))
-    lineVec <- lineVec[nchar(lineVec) > 0]
-    if (length(lineVec) < len) next
-    for (i in seq(1, length(lineVec) - len + 1)) { #for all terms of this length in a line
-      terms <- c(terms, paste0(lineVec[i : (i + len - 2)], collapse = " "))
-      outcome <- c(outcome, lineVec[i + len - 1])
+  lineVec <- unlist(strsplit(line, " "))
+  lineVec <- lineVec[nchar(lineVec) > 0]
+  if (length(lineVec) > 1) {
+    for (i in seq(1, length(lineVec) - 1)) {
+      terms <- c(terms, paste0(lineVec[max(1, i - maxWC + 1) : i], collapse = " "))
+      outcome <- c(outcome, lineVec[i + 1])
     }
   }
-  data.frame(terms = terms, outcome = outcome, 
+  data.frame(terms = terms, 
+             outcome = outcome, 
              stringsAsFactors = FALSE)
 }
 
-benchmark <- function(text, ngrams, etime = Inf, FUN, lambda) {
+#' 
+#' performs benchmarking
+#' 
+#' @param text input character or character vector
+#' @param etime timelimit for benchmarking process
+#' @param FUN function to predict next word
+#' @param ... passed to FUN
+#' @return list with the results that is also printed
+#' 
+benchmark <- function(text, etime = Inf, FUN, ...) {
   score <- 0
   maxScore <- 0
   hitCountTop3 <- 0
   hitCountTop1 <- 0
   totalCount <- 0
   totalTime <- 0
-  for (line in text) { # for each line in a text
-    #print(line)
-    df <- allTerms(line, ngrams)
+  for (line in text) {
+    df <- line2TermsDF(line)
     if (nrow(df) == 0) next
     maxScore <- maxScore + nrow(df) * 3
     totalCount <- totalCount + nrow(df)
     time <- system.time(
       rank <- sapply(seq_len(nrow(df)), 
                    function(i) {
-                     min(which(FUN(df[i, 1], lambda) == df[i, 2]), 4)
+                     min(which(FUN(df[i, 1], ...) == df[i, 2]), 4)
                    })
     )
     totalTime <- totalTime + time[3]
@@ -68,10 +96,9 @@ benchmark <- function(text, ngrams, etime = Inf, FUN, lambda) {
               totalCount,
               totalTime / totalCount 
   ))
+  list(score = score / maxScore,
+       OverallTop1 = hitCountTop1 / totalCount,
+       OverallPre = hitCountTop3 / totalCount,
+       Number = totalCount,
+       time = totalTime / totalCount)
 }
-
-# call
-sapply(c(.2, .3, .4, .5, .6, .8, 1.1, 1.5, 2),
-       function(lam) {
-         benchmark (text, 2:5, etime = 200, getNextWord, lambda = lam)
-       })

@@ -66,4 +66,4 @@ test_that("loadDictionaryVect() -Hash() compatibility", {
 })
 
 file.remove(paste0(inPath, dir(inPath)))
-file.remove(paste0(inBase, dir(inBase)))
+#file.remove(paste0(inBase, dir(inBase)))

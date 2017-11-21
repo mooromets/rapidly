@@ -79,7 +79,7 @@ findNgram <- function(queryIDs, rowFUN, tpm, sparseTpm, ngramIDs, dictVec) {
 #' @param dictVec
 #' @return A vector of three most probable next words
 lookUp <- function(query, resFUN, rowFUN, sparseTpmList, ngramTdmList, idsList, 
-                   dictHash, dictVec, lambda) {
+                   dictHash, dictVec, ...) {
   if (length(sparseTpmList) == 0) 
     return (NULL)
   query <- unlist(strsplit(as.character(query), " "))
@@ -96,5 +96,5 @@ lookUp <- function(query, resFUN, rowFUN, sparseTpmList, ngramTdmList, idsList,
               sparseTpmList[[i]], idsList[[i]], dictVec)
     answerList[[i]] <- topRes
   }
-  resFUN(answerList, lambda)
+  resFUN(answerList)
 }
