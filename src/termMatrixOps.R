@@ -91,9 +91,10 @@ lookUp <- function(query, resFUN, rowFUN, sparseTpmList, ngramTdmList, idsList,
   for (i in seq_along(sparseTpmList)) {
     if (i > length(queryIDs)) 
       break
-    subQuery <- queryIDs[(length(queryIDs) - (i - 1)) : length(queryIDs)]
-    answerList[[i]] <- findNgram(subQuery, rowFUN, ngramTdmList[[i]], 
-                                 sparseTpmList[[i]], idsList[[i]], dictVec)
+    subQuery <- queryIDs[((length(queryIDs) - i) + 1) : length(queryIDs)]
+    topRes <- findNgram(subQuery, rowFUN, ngramTdmList[[i]], 
+              sparseTpmList[[i]], idsList[[i]], dictVec)
+    answerList[[i]] <- topRes
   }
   resFUN(answerList, lambda)
 }

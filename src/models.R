@@ -33,10 +33,11 @@ choose3top <- function(probList) {
 }
 
 stupidBackoff <- function(probList, lambda = 0.4) {
+  if (length(probList) == 0) return(c("the", "on", "a"))
   #concatenate all results
   all <- c()
-  for (i in seq_along(probList)) {
-    all <- c(all, probList[[i]] * lambda^(i-1))
+  for (i in seq(length(probList), 1)) {
+    all <- c(all, probList[[i]] * lambda^(length(probList) - i))
   }
   res <- c()
   for (i in seq_len(3)) {
