@@ -10,4 +10,4 @@ getNextWord <- function(term, ...) {
              idsList, dictHash, dictVec, ...)
 }
 
-benchmark(benchmarkText(), etime = 100, getNextWord)
+benchmark(benchmarkText(), etime = 200, getNextWord)

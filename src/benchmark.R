@@ -11,7 +11,7 @@ source("src/common.R")
 #' @return text as character vector
 #' 
 benchmarkText <- function(seed = 23456, filename = "") {
-  fname <- ifelse(nchar(filename), 
+  fname <- ifelse(nchar(filename) == 0, 
                   paste0(outPathBase, "corpora/test/testChunk.txt"),
                   filename)
   textFile <- file(fname, "rt")

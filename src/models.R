@@ -18,12 +18,7 @@ fiveMostProb <- function(row, dictVec) {
   row <- row / sum(row)
   max5 <- order(row, decreasing = TRUE)[1:5]
   result <- row[max5]
-  names(result) <- c(unlist(sapply(max5, 
-                                   function(x) {ifelse(is.element(x,  dictVec),
-                                                       dictVec[x],
-                                                       NULL)
-                                                }
-                      )))
+  names(result) <- c(unlist(sapply(max5, function(x) dictVec[x])))
   result
 }
 
