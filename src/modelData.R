@@ -30,7 +30,7 @@ trigramTDM <- trigramTDM %>%
   group_by(V1, V2) %>%
   top_n(n = mostFreqLimit, V4.x)
 triIDs <- unique(trigramTDM[, 1:2])
-triIDs <- cbind(triIDs, id = seq(1, nrow(triIDs)))
+triIDs <- cbind(triIDs, data.frame(id = seq_len(nrow(triIDs))))
 trigramTDM <- right_join(triIDs, trigramTDM, by = c("V1", "V2"))
 
 fourgramTDM <- read.csv(paste0(outPathBase, "en_USblogstxt4FULL.csv"))
@@ -40,7 +40,7 @@ fourgramTDM <- fourgramTDM %>%
   group_by(V1, V2, V3) %>%
   top_n(n = mostFreqLimit, V5.x)
 fourIDs <- unique(fourgramTDM[, 1:3])
-fourIDs <- cbind(fourIDs, id = seq(1, nrow(fourIDs)))
+fourIDs <- cbind(fourIDs, data.frame(id = seq_len(nrow(fourIDs))))
 fourgramTDM <- right_join(fourIDs, fourgramTDM, by = c("V1", "V2", "V3"))
 
 fivegramTDM <- read.csv(paste0(outPathBase, "en_USblogstxt5FULL.csv"))
@@ -50,7 +50,7 @@ fivegramTDM <- fivegramTDM %>%
   group_by(V1, V2, V3, V4) %>%
   top_n(n = mostFreqLimit, V6.x)
 fiveIDs <- unique(fivegramTDM[, 1:4])
-fiveIDs <- cbind(fiveIDs, id = seq(1, nrow(fiveIDs)))
+fiveIDs <- cbind(fiveIDs, data.frame(id = seq_len(nrow(fiveIDs))))
 fivegramTDM <- right_join(fiveIDs, fivegramTDM, by = c("V1", "V2", "V3", "V4"))
 
 #term-prediction matrices

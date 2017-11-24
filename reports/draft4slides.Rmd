@@ -34,8 +34,8 @@ qplot(data = df, x = thres) +
   geom_line(aes(y = fivegram), colour = "#902020") +
   geom_col(aes(y = MB * 3 * 10 ^ 4), fill = "#7070B0", alpha = .3) +
   geom_line(aes(y = time * 10 ^ 7), colour = "#FF2020") +
-  geom_line(aes(y = top_precision* 7 * 10 ^ 6), fill = "#70E070") +
-  geom_line(aes(y = precision* 7 * 10 ^ 6), fill = "#70E070")
+  geom_line(aes(y = top_precision* 10 ^ 7), fill = "#70E070") +
+  geom_line(aes(y = precision* 10 ^ 7), fill = "#70E070")
 
 
 #The size of dictionary depending on frequency theshold
