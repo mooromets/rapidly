@@ -109,21 +109,22 @@ generateAllQueries <- function(queryIDs, predWordMaxCount = 4) {
     #reqular terms
     vec <- queryIDs[max(1, length(queryIDs) - i + 1) : length(queryIDs)]
     while (is.na(vec[1]) & length(vec) > 0) vec <- vec[-1] # when NA was in the middle
-    #NAs in short requests are not allowed
-    if (length(vec) <= 2 & sum(is.na(vec)) > 0 | length(vec) == 0 | sum(is.na(vec)) > 1)
+#    #NAs in short requests are not allowed
+#    if (length(vec) <= 2 & sum(is.na(vec)) > 0 | length(vec) == 0 | sum(is.na(vec)) > 1)
+    if (sum(is.na(vec)) > 0 | length(vec) == 0)    
       next
     allReqs <- c(allReqs, list(q = vec))
-    #masked terms
-    if (i > 2 & length(queryIDs) > 2) {
-      for(j in (2 : i)){
-        #same as regular
-        vec <- queryIDs[max(1, length(queryIDs) - i + 1) : length(queryIDs)]
-        #add mask
-        vec[j] <- NA
-        if (sum(is.na(vec)) == 1)
-          allReqs <- c(allReqs, list(q = vec))
-      }
-    }
+#    #masked terms
+#    if (i > 2 & length(queryIDs) > 2) {
+#      for(j in (2 : i)){
+#        #same as regular
+#        vec <- queryIDs[max(1, length(queryIDs) - i + 1) : length(queryIDs)]
+#        #add mask
+#        vec[j] <- NA
+#        if (sum(is.na(vec)) == 1)
+#          allReqs <- c(allReqs, list(q = vec))
+#      }
+#    }
     if (i == length(queryIDs)) break
   }
   unique(allReqs)

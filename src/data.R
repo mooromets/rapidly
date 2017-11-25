@@ -25,14 +25,15 @@ getWord <- function(x, conn) {
 
 getNextTopN <- function(x, conn, nLimit) {
   if (length(x) < 1 | length(x) > 4 | #incorrect input
-      length(x) < 3 & sum(is.na(x)) > 0 | #NA's in short terms
-      is.na(x[1])) #first mustn't be an NA
+      sum(is.na(x)) > 0)
+#      length(x) < 3 & sum(is.na(x)) > 0 | #NA's in short terms
+#      is.na(x[1])) #first mustn't be an NA
     return (data.frame())
   
   tabname <- c("bigrams", "trigrams", "fourgrams", "fivegrams")[length(x)]
   where <- c()
   for(i in seq_along(x)) {
-    if (!is.na(x[i]))
+#    if (!is.na(x[i]))
       where <- c(where, paste0("idword", as.character(i), " == ", x[i]))
   }
   where <- paste(where, collapse = " and ")
