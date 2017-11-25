@@ -3,7 +3,7 @@ qCreateBigramTable <- "
   idword1 INTEGER, 
   idnext INTEGER,
   freq INTEGER,
-  PRIMARY KEY(idword1, idnext)
+  PRIMARY KEY(idword1, freq, idnext)
   )
   "
 
@@ -13,7 +13,7 @@ qCreateTrigramTable <- "
   idword2 INTEGER, 
   idnext INTEGER,
   freq INTEGER,
-  PRIMARY KEY(idword1, idword2, idnext)
+  PRIMARY KEY(idword1, idword2, freq, idnext)
   )
   "
 
@@ -24,7 +24,7 @@ qCreateFourgramTable <- "
   idword3 INTEGER, 
   idnext INTEGER,
   freq INTEGER,
-  PRIMARY KEY(idword1, idword2, idword3, idnext)
+  PRIMARY KEY(idword1, idword2, idword3, freq, idnext)
   )
   "
 
@@ -36,7 +36,7 @@ qCreateFivegramTable <- "
   idword4 INTEGER, 
   idnext INTEGER,
   freq INTEGER,
-  PRIMARY KEY(idword1, idword2, idword3, idword4, idnext)
+  PRIMARY KEY(idword1, idword2, idword3, idword4, freq, idnext)
   )
   "
 
@@ -49,13 +49,13 @@ qCreateDictionaryTable <- "
   "
 
 qDictIndex <- "CREATE UNIQUE INDEX dictIndex ON dict(word)"
-qMaskFour12x <- "CREATE INDEX fourIndex12x ON fourgrams(idword1, idword2)"
-qMaskFour1x3 <- "CREATE INDEX fourIndex1x3 ON fourgrams(idword1, idword3)"
-qMaskFive123x <- "CREATE INDEX fiveIndex123x ON fivegrams(idword1, idword2, idword3)"
-qMaskFive12x4 <- "CREATE INDEX fiveIndex12x4 ON fivegrams(idword1, idword2, idword4)"
-qMaskFive1x34 <- "CREATE INDEX fiveIndex1x34 ON fivegrams(idword1, idword3, idword4)"
-qBIndex <- "CREATE INDEX bindex ON bigrams(idword1, freq)"
-qTrIndex <- "CREATE INDEX trindex ON trigrams(idword1, idword2, freq)"
-qForIndex <- "CREATE INDEX forindex ON fourgrams(idword1, idword2, idword3, freq)"
-qFIndex <- "CREATE INDEX findex ON fivegrams(idword1, idword2, idword3, idword3, freq)"
+qMaskFour12x <- "CREATE INDEX fourIndex12x ON fourgrams(idword1, idword2, freq)"
+qMaskFour1x3 <- "CREATE INDEX fourIndex1x3 ON fourgrams(idword1, idword3, freq)"
+qMaskFive123x <- "CREATE INDEX fiveIndex123x ON fivegrams(idword1, idword2, idword3, freq)"
+qMaskFive12x4 <- "CREATE INDEX fiveIndex12x4 ON fivegrams(idword1, idword2, idword4, freq)"
+qMaskFive1x34 <- "CREATE INDEX fiveIndex1x34 ON fivegrams(idword1, idword3, idword4, freq)"
+#qBIndex <- "CREATE INDEX bindex ON bigrams(idword1, freq)"
+#qTrIndex <- "CREATE INDEX trindex ON trigrams(idword1, idword2, freq)"
+#qForIndex <- "CREATE INDEX forindex ON fourgrams(idword1, idword2, idword3, freq)"
+#qFIndex <- "CREATE INDEX findex ON fivegrams(idword1, idword2, idword3, idword3, freq)"
 

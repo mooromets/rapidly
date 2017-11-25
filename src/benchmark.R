@@ -64,6 +64,7 @@ benchmark <- function(text, etime = Inf, FUN, ...) {
   totalCount <- 0
   totalTime <- 0
   for (line in text) {
+    print(line)
     df <- line2TermsDF(line)
     if (nrow(df) == 0) next
     maxScore <- maxScore + nrow(df) * 3

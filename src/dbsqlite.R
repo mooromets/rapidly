@@ -2,7 +2,7 @@ library(RSQLite)
 
 source("src/sql.R")
 
-con <- dbConnect(RSQLite::SQLite(), "data/words.db")
+con <- dbConnect(RSQLite::SQLite(), "data/words0.db")
 
 #create 4 tables
 res <- dbSendStatement(con, qCreateBigramTable)
@@ -47,7 +47,7 @@ tmp <- data.frame(
   idnext = fivegramTDM$V5,
   freq = fivegramTDM$V6.x
 )
-res <- dbWriteTable(con, "fiveigrams", tmp, append = TRUE)
+res <- dbWriteTable(con, "fivegrams", tmp, append = TRUE)
 
 #indecies
 dbSendStatement(con, qDictIndex)

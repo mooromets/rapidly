@@ -1,4 +1,5 @@
 #different models
+library(dplyr)
 
 maxFUN <- function(row, dictVec) {
   max <-order(row, decreasing = TRUE)[1:5]
@@ -55,4 +56,30 @@ stupidBackoff <- function(probList, lambda = 0.5) {
     all <- all[names(all) != names(all)[maxIdx]]
   }
   return(res)
+}
+
+bestWithMask <- function(items, alpha = 0.5) {
+  if (length(items) == 0) 
+    return(vector())
+  
+  allPred <- do.call(rbind, lapply(items, 
+                function(item){
+                  if (length(item$nextIds) == 0)
+                    return(data.frame())
+                  a <- alpha ^ (4 - length(item$words))
+                  if (sum(is.na(item$words))> 0)
+                    a <- a * alpha ^ 0.5
+                  data.frame(nextId = item$nextIds, 
+                             score = item$nextProb * a)
+                }))
+  if (nrow(allPred) == 0)
+    return(vector())
+
+  allPred <- allPred %>% 
+    group_by(nextId) %>%
+    summarise(score =  sum(score)) %>%
+    arrange(desc(score)) %>%
+    top_n(n = 3, score)
+  
+  as.vector(allPred$nextId)
 }
