@@ -2,7 +2,7 @@ library(RSQLite)
 
 source("src/sql.R")
 
-con <- dbConnect(RSQLite::SQLite(), "data/words2.db")
+con <- dbConnect(RSQLite::SQLite(), "data/words.db")
 
 #create 4 tables
 res <- dbSendStatement(con, qCreateBigramTable)

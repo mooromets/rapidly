@@ -25,27 +25,6 @@ shinyUI(
                                         h4(textOutput("otext3"), style = "background-color:#f5f5ff;")))
                                )
                             )
-             ),
-             tabPanel("Component 2",
-                      fluidRow(
-                        column(10,
-                               "sidebar",
-                               h1("H1 Text"),
-                               h3("H3 Text")
-                        ),
-                        column(2,
-                               "main",
-                               h1("H1 Text"),
-                               h3("H3 Text")
-                        )
-                      )
-                      ),
-             tabPanel("Component 3",
-                      fluidRow(
-                               h1("H1 Text"),
-                               h3("H3 Text")
-                      )
-                      
-                      )  
-
-)  )
+             )
+    )  
+)
