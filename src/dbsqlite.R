@@ -2,7 +2,7 @@ library(RSQLite)
 
 source("src/sql.R")
 
-con <- dbConnect(RSQLite::SQLite(), "data/words1.db")
+con <- dbConnect(RSQLite::SQLite(), "data/words2.db")
 
 #create 4 tables
 res <- dbSendStatement(con, qCreateBigramTable)
@@ -51,11 +51,11 @@ res <- dbWriteTable(con, "fivegrams", tmp, append = TRUE)
 
 #indecies
 dbSendStatement(con, qDictIndex)
-#dbSendStatement(con, qMaskFour12x)
-#dbSendStatement(con, qMaskFour1x3)
-#dbSendStatement(con, qMaskFive123x)
-#dbSendStatement(con, qMaskFive12x4)
-#dbSendStatement(con, qMaskFive1x34)
+dbSendStatement(con, qMaskFour12x)
+dbSendStatement(con, qMaskFour1x3)
+dbSendStatement(con, qMaskFive123x)
+dbSendStatement(con, qMaskFive12x4)
+dbSendStatement(con, qMaskFive1x34)
 
 dbClearResult(dbListResults(con)[[1]])
 dbDisconnect(con)

@@ -109,9 +109,8 @@ generateAllQueries <- function(queryIDs, predWordMaxCount = 4) {
     #reqular terms
     vec <- queryIDs[max(1, length(queryIDs) - i + 1) : length(queryIDs)]
     while (is.na(vec[1]) & length(vec) > 0) vec <- vec[-1] # when NA was in the middle
-#    #NAs in short requests are not allowed
-#    if (length(vec) <= 2 & sum(is.na(vec)) > 0 | length(vec) == 0 | sum(is.na(vec)) > 1)
-    if (sum(is.na(vec)) > 0 | length(vec) == 0)    
+    #NAs in short requests are not allowed
+    if (length(vec) <= 2 & sum(is.na(vec)) > 0 | length(vec) == 0 | sum(is.na(vec)) > 1)
       next
     allReqs <- c(allReqs, list(q = vec))
 #    #masked terms
@@ -155,8 +154,6 @@ lookDB <- function(query, resFUN, TopNPerReq = 5, conn = dataDB(), ...) {
 
   #main job starts here
   queryIDs <- getWordID(query, conn)
-  #remove NA-terms at the beginning
-  #while (is.na(queryIDs[1])) queryIDs <- queryIDs[-1]
   allReqs <-  generateAllQueries(queryIDs, predWordMaxCount)
   answerList <- lapply(allReqs, 
                        function(rqst) {

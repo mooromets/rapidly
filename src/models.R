@@ -58,7 +58,7 @@ stupidBackoff <- function(probList, lambda = 0.5) {
   return(res)
 }
 
-bestWithMask <- function(items, alpha = 0.5) {
+bestWithMask <- function(items, alpha = 0.5, maskedPow = 1.7) {
   if (length(items) == 0) 
     return(vector())
   
@@ -67,8 +67,8 @@ bestWithMask <- function(items, alpha = 0.5) {
                   if (length(item$nextIds) == 0)
                     return(data.frame())
                   a <- alpha ^ (4 - length(item$words))
-#                  if (sum(is.na(item$words))> 0)
-#                    a <- a * alpha ^ 0.5
+                  if (sum(is.na(item$words))> 0)
+                    a <- a * alpha ^ maskedPow
                   data.frame(nextId = item$nextIds, 
                              score = item$nextProb * a)
                 }))
