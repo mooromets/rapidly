@@ -1,7 +1,7 @@
 library(shiny)
 
 source("src/models.R")
-source("src/termMatrixOps.R")
+source("src/search.R")
 
 shinyServer(function(input, output, session) {
   newVals = reactive({
