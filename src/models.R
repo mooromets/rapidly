@@ -1,5 +1,6 @@
 #different models
 library(dplyr)
+source("src/monitor.R")
 
 maxFUN <- function(row, dictVec) {
   max <-order(row, decreasing = TRUE)[1:5]
@@ -72,14 +73,16 @@ bestWithMask <- function(items, alpha = 0.5, maskedPow = 1.7) {
                   data.frame(nextId = item$nextIds, 
                              score = item$nextProb * a)
                 }))
+  monitorAllScores(allPred)
   if (nrow(allPred) == 0)
     return(vector())
 
-  allPred <- allPred %>% 
+  allPred <- as.data.frame(allPred %>% 
     group_by(nextId) %>%
     summarise(score =  sum(score)) %>%
-    arrange(desc(score)) %>%
-    top_n(n = 3, score)
+    arrange(desc(score)))
+  monitorFinalScore(allPred)
+  allPred <- top_n(allPred, n = 3, score)
   
   as.vector(allPred$nextId)
 }

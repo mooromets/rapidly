@@ -1,6 +1,14 @@
 
 getWordID <- function(x, conn) {
   #q <- paste0("select id from dict where word IN ('", paste(x, collapse = "', '"), "')")
+  #TODO refactor
+  #SELECT * FROM dict where word IN ('be', 'a', 'that') 
+  #ORDER BY   
+  #CASE word
+  #WHEN 'be' THEN 0
+  #WHEN 'a' THEN 1
+  #WHEN 'that' THEN 2
+  #END
   ret <- vector(mode = "numeric", length = length(x))
   for (i in seq_along(x)) {
     word <- gsub("'", "''", x[i])
@@ -12,6 +20,10 @@ getWordID <- function(x, conn) {
 }
 
 getWord <- function(x, conn) {
+  if (is.null(x)) return(NULL)
+  #remember position of NAs and remove them
+  idx <- !is.na(x)
+  x <- x[!is.na(x)]
 #  q <- paste0("select word from dict where id IN (", paste(x, collapse = ", "), ")")
   ret <- vector(mode = "character", length = length(x))
   for (i in seq_along(x)) {
@@ -19,7 +31,8 @@ getWord <- function(x, conn) {
     res <- dbGetQuery(conn, q)
     ret[i] <- ifelse(nrow(res) == 1, res[1, 1], NA)
   }
-  ret
+  tmp <- rep(".NA.", length(idx))
+  tmp[idx] <- ret
 }
 
 

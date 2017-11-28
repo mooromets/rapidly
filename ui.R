@@ -25,6 +25,25 @@ shinyUI(
                                         h4(textOutput("otext3"), style = "background-color:#f5f5ff;")))
                                )
                             )
+             ),
+             tabPanel("Prediction exploration",
+                      fluidRow(
+                        column(12,
+                               align = "center",
+                               h3("Type a phrase to explore how a prediction was built", style = "color: #4d3a7d;"))),
+                      fluidRow(
+                        column(12,
+                               align = "center",
+                               textInput("textexplore", NULL, "",
+                                        placeholder = "enter a phrase here"),
+                               actionButton("submit", "Submit", icon("refresh")),
+                               textOutput("statement"),
+                               textOutput("cleaned"),
+                               tableOutput("idcleaned"),
+                               uiOutput("answlist"),
+                               tableOutput("allscores"),
+                               tableOutput("finalscore"))
+                      )
              )
     )  
 )

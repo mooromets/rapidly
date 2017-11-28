@@ -28,20 +28,23 @@ generateAllQueries <- function(queryIDs, predWordMaxCount = 4) {
   unique(allReqs)
 }
 
-lookDB <- function(query, resFUN, TopNPerReq = 5, conn = dataDB(), ...) {
+lookDB <- function(query, resFUN, TopNPerReq = 5, conn = dataDB(), monitor = FALSE, ...) {
+  IS_MONITOR <<- monitor
   # check input
   if (length(query) == 0)
     return(DEFAULT_PREDICTION)
   else if (length(query) != 1)
-    query <- query[length(query)]
+    query <- query[length(query)] #pick only the last line from a vector
   
   #cut input to save some time on cleaning it
   query <- substr(query, max(1, nchar(query) - MAX_TERM_LEN), nchar(query))
+  monitorInputStatement(query)
   query <- cleanText(query)
   # pick only the last line
   if (length(query) != 1)
     query <- query[length(query)]
-  
+  monitorCleanStatement(query)
+
   #extract (maximum) four last words
   predWordMaxCount <- 4
   query <- unlist(strsplit(as.character(query), " "))
@@ -52,6 +55,7 @@ lookDB <- function(query, resFUN, TopNPerReq = 5, conn = dataDB(), ...) {
   
   #main job starts here
   queryIDs <- getWordID(query, conn)
+  monitorCleanStatementIDs(data.frame(word = query, id = as.integer(queryIDs)))
   allReqs <-  generateAllQueries(queryIDs, predWordMaxCount)
   answerList <- lapply(allReqs, 
                        function(rqst) {
@@ -60,6 +64,7 @@ lookDB <- function(query, resFUN, TopNPerReq = 5, conn = dataDB(), ...) {
                               nextIds = nxt$idnext,
                               nextProb = nxt$freq)
                        })
+  monitorAnswersList(answerList)
   best3id <- resFUN(answerList)
   words <- c(getWord(best3id, conn), DEFAULT_PREDICTION) #add default if there's not enoght predictions
   return(words[1:3])
