@@ -22,8 +22,9 @@ getWordID <- function(x, conn) {
 getWord <- function(x, conn) {
   if (is.null(x)) return(NULL)
   #remember position of NAs and remove them
-  idx <- !is.na(x)
-  x <- x[!is.na(x)]
+  
+  idx <- which(!is.na(x))
+  x <- x[idx]
 #  q <- paste0("select word from dict where id IN (", paste(x, collapse = ", "), ")")
   ret <- vector(mode = "character", length = length(x))
   for (i in seq_along(x)) {
@@ -33,6 +34,7 @@ getWord <- function(x, conn) {
   }
   tmp <- rep(".NA.", length(idx))
   tmp[idx] <- ret
+  (tmp)
 }
 
 
