@@ -1,5 +1,4 @@
 library(shiny)
-library(DT)
 
 source("src/models.R")
 source("src/search.R")
@@ -59,5 +58,9 @@ shinyServer(function(input, output, session) {
                      function(item) tags$p(paste(item, collapse = " ")))
              )
            })
+  })
+  
+  onStop(function() {
+    dbDisconnect(dataDB())
   })
 })
