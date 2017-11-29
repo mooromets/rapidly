@@ -45,7 +45,7 @@ findWordsPresenceQueryList <- function(wordId, limit = 20) {
 presenceList <- function(word, ...) {
   word <- cleanInput(word)
   if(length(word) == 0)
-    rerutn(list())
+    return(list())
   
   wordId <- getWordID(word, dataDB())
   if (is.na(wordId))

@@ -3,6 +3,7 @@ library(DT)
 
 source("src/models.R")
 source("src/search.R")
+source("src/presence.R")
 
 shinyServer(function(input, output, session) {
   observeEvent(input$intext, {
@@ -39,5 +40,24 @@ shinyServer(function(input, output, session) {
                  paste0("tabl", as.character(idx)))
            })
   })
+  
+  phrs <- eventReactive(input$submitword, {
+    presenceList(input$wordexplore)
+  })
 
+  dfc = function(m){
+    tags$div(
+      apply(m, 1, function(item) tags$p(paste(item, collapse = " ")))
+    )
+  }
+  
+  output$phralist <- renderUI({
+    lapply(seq_along(phrs()), 
+           function(idx){
+             tags$div(
+               apply(phrs()[[idx]], 1, 
+                     function(item) tags$p(paste(item, collapse = " ")))
+             )
+           })
+  })
 })

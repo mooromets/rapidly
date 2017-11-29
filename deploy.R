@@ -22,7 +22,8 @@ file.copy("src/data.R", srcDeployPath)
 file.copy("src/search.R", srcDeployPath)
 file.copy("src/common.R", srcDeployPath)
 file.copy("src/cleanText.R", srcDeployPath)
-
+file.copy("src/monitor.R", srcDeployPath)
+file.copy("src/presence.R", srcDeployPath)
 
 #copy database
 file.copy("data/words.db", dataPath)

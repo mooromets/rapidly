@@ -43,6 +43,21 @@ shinyUI(
                                tableOutput("allscores"),
                                tableOutput("finalscore"))
                       )
+             ),
+             tabPanel("Explore a word's presence",
+                      fluidRow(
+                        column(12,
+                               align = "center",
+                               h3("Type a word to find out the most frequent phrases with it", style = "color: #4d3a7d;"))),
+                      fluidRow(
+                        column(12,
+                               align = "center",
+                               textInput("wordexplore", NULL, "",
+                                         placeholder = "enter a word here"),
+                               actionButton("submitword", "Submit", icon("refresh")),
+                               p("(this may take up to a few seconds)"),
+                               uiOutput("phralist"))
+                      )
              )
     )  
 )
