@@ -6,11 +6,6 @@ monitorReset <- function(){
   MonitorData <<- list()   
 }
 
-monitorInputStatement <- function(str) {
-  if (IS_MONITOR)
-    MonitorData[["inputStatement"]] <<- str
-}
-
 monitorCleanStatement <- function(clean) {
   if (IS_MONITOR)
     MonitorData[["cleanStatement"]] <<- clean

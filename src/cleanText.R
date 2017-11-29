@@ -2,6 +2,8 @@
 
 library(tm)
 
+source("src/common.R")
+
 removeStandaloneLetters <- function(x) {
   removeWords(x, c("b", "c", "e", "f", "g", "h", "j", "k", "l",
                    "p", "q", "r", "u", "v", "w", "x", "y", "z"))  
@@ -59,4 +61,19 @@ cleanText <- function(x) {
   x <- removeConseqApost(x)
   x <- removeStandaloneLetters(x)
   x <- stripWhitespace(x)
+}
+
+cleanInput <- function(x) {
+  if (length(x) == 0)
+    return (NULL)
+  else if (length(x) != 1)
+    x <- x[length(x)] #pick only the last line from a vector
+  
+  #cut input to save some time on cleaning it
+  x <- substr(x, max(1, nchar(x) - MAX_TERM_LEN), nchar(x))
+  x <- cleanText(x)
+  # pick only the last line
+  if (length(x) > 1)
+    x <- x[length(x)]
+  x
 }

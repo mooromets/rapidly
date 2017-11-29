@@ -19,7 +19,6 @@ shinyServer(function(input, output, session) {
     (MonitorData)
   })
 
-  output$statement <- renderText(paste("Statement:", monitor()$inputStatement))
   output$cleaned <- renderText(paste("Cleaned:", monitor()$cleanStatement))
   output$idcleaned <- renderTable(monitor()$cleanStatementIDs, colnames = FALSE)
   output$allscores <- renderTable(monitor()$allScores, colnames = FALSE)

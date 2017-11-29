@@ -37,7 +37,6 @@ shinyUI(
                                textInput("textexplore", NULL, "",
                                         placeholder = "enter a phrase here"),
                                actionButton("submit", "Submit", icon("refresh")),
-                               textOutput("statement"),
                                textOutput("cleaned"),
                                tableOutput("idcleaned"),
                                uiOutput("answlist"),

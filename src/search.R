@@ -30,20 +30,11 @@ generateAllQueries <- function(queryIDs, predWordMaxCount = 4) {
 
 lookDB <- function(query, resFUN, TopNPerReq = 5, conn = dataDB(), monitor = FALSE, ...) {
   IS_MONITOR <<- monitor
-  # check input
+  
+  query <- cleanInput(query)
+  monitorCleanStatement(query)  
   if (length(query) == 0)
     return(DEFAULT_PREDICTION)
-  else if (length(query) != 1)
-    query <- query[length(query)] #pick only the last line from a vector
-  
-  #cut input to save some time on cleaning it
-  query <- substr(query, max(1, nchar(query) - MAX_TERM_LEN), nchar(query))
-  monitorInputStatement(query)
-  query <- cleanText(query)
-  # pick only the last line
-  if (length(query) != 1)
-    query <- query[length(query)]
-  monitorCleanStatement(query)
 
   #extract (maximum) four last words
   predWordMaxCount <- 4
