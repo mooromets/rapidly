@@ -1,36 +1,30 @@
 library(shiny)
+library(shinythemes)
 shinyUI(
   navbarPage("My App",
+             theme = shinytheme("flatly"),
              tabPanel("Next word",
+             tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
+                      fluidRow(column(12, align = "center",
+                               h3("Type your phrase"),
+                               textInput("intext", NULL, "",
+                                         placeholder = "enter text to get the prediction"))),
                       fluidRow(
-                        column(6, offset = 3,
-                               align = "center",
-                               h3("Type your phrase", style = "font-family: 'Lobster', cursive;
-                                                          font-weight: 500; line-height: 1.1; 
-                                                          color: #4d3a7d;"),
-                               fluidRow(
-                                 column(12,
-                                        align = "center",
-                                        textInput("intext", NULL, "",
-                                                  placeholder = "enter text to get the prediction"))),
-                               fluidRow(
-                                 column(4,
-                                        align = "center",
-                                        h4(textOutput("otext1"), style = "background-color:#f5f5ff;")),
-                                 column(4,
-                                        align = "center",
-                                        h4(textOutput("otext2"), style = "background-color:#f5f5ff;")), 
-                                 column(4,
-                                        align = "center",
-                                        h4(textOutput("otext3"), style = "background-color:#f5f5ff;")))
-                               )
+                         column(4, offset = 4,
+                                align = "center",
+                                fluidRow(
+                                  column(4, align = "center", p(textOutput("otext1"))),
+                                  column(4, align = "center", p(textOutput("otext2"))), 
+                                  column(4, align = "center", p(textOutput("otext3")))
+                                )
                             )
+                      )
              ),
              tabPanel("Prediction exploration",
                       fluidRow(
                         column(12,
                                align = "center",
-                               h3("Type a phrase to explore how a prediction was built", style = "color: #4d3a7d;"))),
+                               h3("Type a phrase to explore how a prediction was built"))),
                       fluidRow(
                         column(12,
                                align = "center",
@@ -48,7 +42,7 @@ shinyUI(
                       fluidRow(
                         column(12,
                                align = "center",
-                               h3("Type a word to find out the most frequent phrases with it", style = "color: #4d3a7d;"))),
+                               h3("Type a word to find out the most frequent phrases with it"))),
                       fluidRow(
                         column(12,
                                align = "center",

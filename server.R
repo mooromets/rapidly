@@ -26,38 +26,40 @@ shinyServer(function(input, output, session) {
 
   tfc = function(m, output, id){
     output[[id]] <- renderTable(m[["nextdf"]], colnames = FALSE)
-    tags$div(
-      p(paste(m[["words"]], collapse = " ")),
-      tableOutput(id))
+    column( 3,
+            tags$div(class = "card text-white bg-primary",
+              span(paste(m[["words"]], collapse = " ")),
+              tableOutput(id))
+    )
   }
   
   output$answlist <- renderUI({
-    lapply(seq_along(monitor()$answersList), 
-           function(idx){
-             tfc(monitor()$answersList[[idx]], 
-                 output, 
-                 paste0("tabl", as.character(idx)))
-           })
+    fluidRow(
+      lapply(seq_along(monitor()$answersList), 
+             function(idx){
+               tfc(monitor()$answersList[[idx]], 
+                   output, 
+                   paste0("tabl", as.character(idx)))
+             })
+    )
   })
   
   phrs <- eventReactive(input$submitword, {
     presenceList(input$wordexplore)
   })
 
-  dfc = function(m){
-    tags$div(
-      apply(m, 1, function(item) tags$p(paste(item, collapse = " ")))
-    )
-  }
-  
   output$phralist <- renderUI({
-    lapply(seq_along(phrs()), 
-           function(idx){
-             tags$div(
-               apply(phrs()[[idx]], 1, 
-                     function(item) tags$p(paste(item, collapse = " ")))
-             )
-           })
+    fluidRow(
+      lapply(seq_along(phrs()), 
+             function(idx){
+               column( 3,
+                 tags$div(class = "card text-white bg-primary",
+                   apply(phrs()[[idx]], 1, 
+                         function(item) tags$span(paste(item, collapse = " ")))
+                 )
+               )
+             })
+    )
   })
   
   onStop(function() {

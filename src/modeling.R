@@ -8,9 +8,9 @@ source("src/benchmark.R")
 source("src/common.R")
 
 getNextWord <- function(term, ...) {
-  lookDB(term, bestWithMask, monitor = TRUE, ...)
+  lookDB(term, bestWithMask, ...)
 }
 
-#benchmark(benchmarkText(), etime = 5, getNextWord)
+benchmark(benchmarkText(), etime = 300, getNextWord)
 
-print(getNextWord("let it go dog"))
+#print(getNextWord("let it go dog"))
