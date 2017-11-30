@@ -35,7 +35,7 @@ findWordsPresenceQueryList <- function(wordId, limit = 20) {
                              collapse = " OR ")
                       )
     wholeQue <- paste(selectFromStr, joinStr, whereStr,
-                      "ORDER BY b.freq",
+                      "ORDER BY b.freq desc",
                       "LIMIT", limit)
     out[[itab]] <- wholeQue
   }
