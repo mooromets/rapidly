@@ -1,7 +1,13 @@
 library(shiny)
 library(shinythemes)
 shinyUI(
-  navbarPage("My App",
+  navbarPage(span(h3("R", style = "color:orange", class = "displ-inline"), 
+                  h3("a", style = "color:yellow", class = "displ-inline"), 
+                  h3("p", style = "color:green", class = "displ-inline"), 
+                  h3("i", style = "color:orange", class = "displ-inline"), 
+                  h3("d", style = "color:red", class = "displ-inline"), 
+                  h3("l", style = "color:green", class = "displ-inline"), 
+                  h3("y", style = "color:yellow", class = "displ-inline")),
              theme = shinytheme("flatly"),
              tabPanel("Next word",
              tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),

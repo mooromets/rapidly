@@ -1,3 +1,7 @@
 .highlight-term {
-  color: #4444ff;
+	color: #4444ff;
+}
+
+.displ-inline {
+	display:inline
 }
