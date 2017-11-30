@@ -23,7 +23,7 @@ getWord <- function(x, conn) {
   if (is.null(x)) return(NULL)
   #remember position of NAs and remove them
   
-  idx <- which(!is.na(x))
+  idx <- !is.na(x)
   x <- x[idx]
 #  q <- paste0("select word from dict where id IN (", paste(x, collapse = ", "), ")")
   ret <- vector(mode = "character", length = length(x))
@@ -46,11 +46,15 @@ getNextTopN <- function(x, conn, nLimit) {
   
   tabname <- c("bigrams", "trigrams", "fourgrams", "fivegrams")[length(x)]
   where <- c()
+  groupBy <- c()
   for(i in seq_along(x)) {
-    if (!is.na(x[i]))
+    if (!is.na(x[i])) {
       where <- c(where, paste0("idword", as.character(i), " == ", x[i]))
+      groupBy <- c(groupBy, paste0("idword", as.character(i)))
+    }
   }
   where <- paste(where, collapse = " and ")
+  groupBy <- paste(c(groupBy, "idnext"), collapse = ",")
   #get summary frequency for this term
   q <- paste("select sum(freq) from", tabname, 
              "where", where)
@@ -58,10 +62,22 @@ getNextTopN <- function(x, conn, nLimit) {
   sumFreq <- res[1, 1]
   if (is.na(sumFreq) | sumFreq < 1)
     return (data.frame())
+  
+  if (sum(is.na(x)) > 0) {
+    selectFrom <- "select idnext, sum(freq) as freq from"
+    groupBy <- paste("group by", paste(c(groupBy, "idnext"), collapse = ","))
+    odrerBy <- "order by sum(freq) desc"
+  } else {
+    selectFrom <- "select idnext, freq from"
+    groupBy <- ""
+    odrerBy <- "order by freq desc"
+  }
+  
   #get top terms term
-  q <- paste("select idnext, freq from", tabname, 
+  q <- paste(selectFrom, tabname, 
              "where", where,
-             "order by freq desc",
+             groupBy,
+             odrerBy,
              "limit", nLimit)
   df <- dbGetQuery(conn, q)
   df$freq <- df$freq / sumFreq
