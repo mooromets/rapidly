@@ -4,7 +4,8 @@ source("src/data.R")
 
 generateAllQueries <- function(queryIDs, predWordMaxCount = 4) {
   allReqs <- list()
-  for (i in seq_len(predWordMaxCount)) {
+  for (i in (predWordMaxCount : 1)) {
+    if (i > length(queryIDs)) next
     #reqular terms
     vec <- queryIDs[max(1, length(queryIDs) - i + 1) : length(queryIDs)]
     while (is.na(vec[1]) & length(vec) > 0) vec <- vec[-1] # when NA was in the middle
@@ -23,13 +24,15 @@ generateAllQueries <- function(queryIDs, predWordMaxCount = 4) {
     #          allReqs <- c(allReqs, list(q = vec))
     #      }
     #    }
-    if (i == length(queryIDs)) break
+    
+    #if (i == length(queryIDs)) break
   }
   unique(allReqs)
 }
 
 lookDB <- function(query, resFUN, TopNPerReq = 5, conn = dataDB(), monitor = FALSE, ...) {
   IS_MONITOR <<- monitor
+  monitorReset()
   
   query <- cleanInput(query)
   monitorCleanStatement(query)  
