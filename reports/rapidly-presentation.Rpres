@@ -1,0 +1,78 @@
+<style>
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 { 
+   margin-bottom: .6em;
+   color: #2C3E50;
+}
+
+.reveal p,
+.reveal table {
+   margin-bottom: 1em; 
+   color: #2C3E50;
+    font-size: 110%;   
+}
+
+.reveal p {
+  font-size: 110%
+}
+
+.reveal li {
+   margin-bottom: .4em;
+   color: #2C3E50;
+  font-size: 110%;   
+}
+
+.section .reveal .state-background {
+  background: #2C3E50;
+}
+
+.section .reveal h1,
+.section .reveal p {
+    color: #18BC9C;
+    position: relative;
+    top: 4%;
+}
+
+.reveal strong {
+  color: #2C3E50;
+}    
+
+</style>
+
+Rapidly. A smart keyboard
+========================================================
+author: Sergey Sambor 
+date: 2017-12-01
+autosize: true
+font-family: 'Lato'
+
+Rapidly. The Project
+========================================================
+<br>
+### Rapidly is a smart keyboard project in the field of Natural Language Processing
+Its goal is to give suggestions on the next word to a user while he types. As the usage of mobile devices grows every year, this task becomes more and more vital becuase it is saving the people their time or allowing them to send or share an information quickly, <strong style = "color: #18BC9C;">rapidly</strong>.   
+<br>
+ - 4.77 billion users owning 7.2 billion gadgets worldwide  
+ - over 50 mobile keyboard apps availiable to pick from  
+<br> 
+
+And with a growing every year performance of gadgets it's essential to provide more and more accuracy utilising the power of modern computers.
+
+
+Slide With Code
+========================================================
+
+```{r}
+summary(cars)
+```
+
+Slide With Plot
+========================================================
+
+```{r, echo=FALSE}
+plot(cars)
+```

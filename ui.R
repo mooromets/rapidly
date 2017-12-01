@@ -36,7 +36,7 @@ shinyUI(
                                align = "center",
                                textInput("textexplore", NULL, "",
                                         placeholder = "enter a phrase here"),
-                               actionButton("submit", "Submit", icon("refresh")),
+                               actionButton("submit", "Submit", class = "btn btn-primary"),
                                textOutput("cleaned"),
                                tableOutput("idcleaned"))),
                       fluidRow(
@@ -66,7 +66,7 @@ shinyUI(
                                align = "center",
                                textInput("wordexplore", NULL, "",
                                          placeholder = "enter a word here"),
-                               actionButton("submitword", "Submit", icon("refresh")),
+                               actionButton("submitword", "Submit", class = "btn btn-primary"),
                                p("(this may take up to a few seconds)"))
                       ),
                       fluidRow(
