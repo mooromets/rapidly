@@ -3,6 +3,7 @@ IS_MONITOR <- TRUE
 MonitorData <- list()
 
 monitorReset <- function(){
+if (IS_MONITOR)  
   MonitorData <<- list()   
 }
 
