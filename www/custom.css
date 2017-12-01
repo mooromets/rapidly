@@ -5,3 +5,52 @@
 .displ-inline {
 	display:inline
 }
+
+.rapidly {
+	font-size: 120%
+}
+
+.tab-panes{
+	padding: 9px;
+	border-radius: 6px;
+	margin: 9px;
+}
+
+.border-gray {
+	border: 2px	solid gray;
+}
+
+.border-green {
+	border: 2px	solid #18BC9C;
+}
+
+.border-orange {
+	border: 2px	solid #fd7e14;
+}
+
+.border-red {
+	border: 2px	solid #E74C3C;
+}
+.border-indigo {
+	border: 2px	solid #6610f2;
+}
+
+.color-green{
+	color: #18BC9C;
+}
+
+.color-orange{
+	color: #fd7e14;
+}
+
+.color-red{
+	color: #E74C3C;
+}
+
+.color-indigo{
+	color: #6610f2;
+}
+
+.color-yellow{
+	color: #F3BC12	
+}

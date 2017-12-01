@@ -20,28 +20,34 @@ shinyServer(function(input, output, session) {
   })
 
   output$cleaned <- renderText(paste("Cleaned:", monitor()$cleanStatement))
-  output$idcleaned <- renderTable(monitor()$cleanStatementIDs, colnames = FALSE)
-  output$allscores <- renderTable(monitor()$allScores, colnames = FALSE)
-  output$finalscore <- renderTable(monitor()$finalScore, colnames = FALSE)
+  output$idcleaned <- renderTable(monitor()$cleanStatementIDs, colnames = FALSE, digits = 3)
+  output$allscores <- renderTable(monitor()$allScores, colnames = FALSE, digits = 3)
+  output$finalscore <- renderTable(monitor()$finalScore, colnames = FALSE, digits = 3)
 
-  tfc = function(m, output, id){
-    output[[id]] <- renderTable(m[["nextdf"]], colnames = FALSE)
-    column( 3,
-            tags$div(class = "card text-white bg-primary",
-              span(paste(m[["words"]], collapse = " ")),
-              tableOutput(id))
-    )
+  tfc = function(m, output, id, card, color){
+    output[[id]] <- renderTable(m[["nextdf"]], colnames = FALSE, digits = 3)
+    tags$div(class = card,
+      h4(paste(m[["words"]], collapse = " "), class = color, style = "margin:15px"),
+      tableOutput(id))
   }
   
   output$answlist <- renderUI({
-    fluidRow(
-      lapply(seq_along(monitor()$answersList), 
-             function(idx){
-               tfc(monitor()$answersList[[idx]], 
-                   output, 
-                   paste0("tabl", as.character(idx)))
-             })
-    )
+    cards <- c("tab-panes border-green",
+              "tab-panes border-orange",
+              "tab-panes border-red",
+              "tab-panes border-indigo")
+    colors <- c("color-green",
+               "color-orange",
+               "color-red",
+               "color-indigo")
+    lapply(seq_along(monitor()$answersList), 
+           function(idx){
+             tfc(monitor()$answersList[[idx]], 
+                 output, 
+                 paste0("tabl", as.character(idx)),
+                 cards[idx],
+                 colors[idx])
+           })
   })
   
   phrs <- eventReactive(input$submitword, {
@@ -53,9 +59,12 @@ shinyServer(function(input, output, session) {
       lapply(seq_along(phrs()), 
              function(idx){
                column( 3,
-                 tags$div(class = "card text-white bg-primary",
+                 tags$div(class = "tab-panes border-gray",
                    apply(phrs()[[idx]], 1, 
-                         function(item) tags$span(paste(item, collapse = " ")))
+                         function(item) {
+                           item[item == input$wordexplore] <- paste("<strong>", input$wordexplore, "</strong>")
+                           tags$div(HTML(paste(item, collapse = " ")))
+                          })
                  )
                )
              })
