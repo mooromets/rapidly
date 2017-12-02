@@ -6,12 +6,19 @@ source("src/presence.R")
 
 shinyServer(function(input, output, session) {
   observeEvent(input$intext, {
-    if (length(grep(" $", input$intext)) > 0 ) {
-      res <- lookDB(input$intext, bestWithMask)
-      output$otext1 <- renderText(res[1])
-      output$otext2 <- renderText(res[2])
-      output$otext3 <- renderText(res[3])
+    if (nchar(input$intext) > 0 ) {
+      t <- system.time({
+        res <- lookDB(input$intext, bestWithMask)
+      })  
+      timeStr <- paste0("(", as.character(round(t[3], 3)) ," seconds)")
+    } else {
+      res <- rep("", 3)
+      timeStr <- ""
     }
+    output$otext1 <- renderText(res[1])
+    output$otext2 <- renderText(res[2])
+    output$otext3 <- renderText(res[3])
+    output$nextwordtime <- renderText(timeStr)
   })
   
   monitor <- eventReactive(input$submit, {

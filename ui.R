@@ -12,9 +12,10 @@ shinyUI(
              tabPanel("Next word",
              tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
                       fluidRow(column(12, align = "center",
-                               h3("Type your phrase"),
+                               h3("Start typing..."),
                                textInput("intext", NULL, "",
-                                         placeholder = "enter text to get the prediction"))),
+                                         placeholder = "your text here"),
+                               h6(style = "color: #b4bcc2", textOutput("nextwordtime")))),
                       fluidRow(
                          column(4, offset = 4,
                                 align = "center",

@@ -89,6 +89,6 @@ The database, created by Builder, contain 4 tables: 2-, 3-, 4-, 5-grams. Each ta
 The Shiny web app
 ========================================================
 With the help of web app a user can further explore the data and the prediction algorithm.
-- <strong>Page1 </strong> allows one to try the main feature: get suggestions on the next word while the user is typing
+- <strong>Next word</strong> tab allows one to try the main feature: get suggestions on the next word while typing
 - <strong>Page2 </strong> displays how the prediction was made in details. Each step is screened with all the related data to explore effectiveness of the model.
 - <strong>Page3 </strong> allowes user to explore a word's usage in the language, as it appeared in the training corpora
