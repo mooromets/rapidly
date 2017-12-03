@@ -54,10 +54,11 @@ shinyUI(
                         tags$div(class = "jumbotron",
                                  fluidRow(
                                           column(4,
-                                                 h4("Text after cleaning"),
+                                                 h4("Cleaned input phrase"),
                                                  h5(textOutput("cleaned"))),
                                           column(4,
-                                                 h4("Word search in the dictionary"),
+                                                 h4("Words found in the dictionary"),
+                                                 h6("(only the last 4 are taken for the prediction)"),
                                                  tableOutput("idcleaned"))
                                  )
                         )),
@@ -67,11 +68,11 @@ shinyUI(
                                                  h4("Top results in each query"),
                                                  uiOutput("answlist")),
                                           column(4, 
-                                                 h4("Each candidate's score"),
+                                                 h4("Coefficients applied to each candidate"),
                                                  tags$div(tableOutput("allscores"))
                                                  ),
                                           column(4,
-                                                 h4("Summary table"),
+                                                 h4("Ordered summary table"),
                                                  tags$div(tableOutput("finalscore")))
                                                  )
                         )
