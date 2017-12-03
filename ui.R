@@ -9,7 +9,7 @@ shinyUI(
                   p("l", class = "displ-inline rapidly color-green"), 
                   p("y", class = "displ-inline rapidly color-yellow")),
              theme = shinytheme("flatly"),
-             tabPanel("Next word",
+             tabPanel("Next word suggestions",
              tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
                       fluidRow(column(12, align = "center",
                                h3("Start typing..."),
@@ -20,9 +20,9 @@ shinyUI(
                          column(4, offset = 4,
                                 align = "center",
                                 fluidRow(
-                                  column(4, align = "center", textOutput("otext1")),
-                                  column(4, align = "center", textOutput("otext2")), 
-                                  column(4, align = "center", textOutput("otext3"))
+                                  column(4, align = "center", h4(textOutput("otext1"))),
+                                  column(4, align = "center", h4(textOutput("otext2"))), 
+                                  column(4, align = "center", h4(textOutput("otext3")))
                                 )
                             )
                       )
@@ -33,13 +33,34 @@ shinyUI(
                                align = "center",
                                h3("Type a phrase to explore how a prediction was built"))),
                       fluidRow(
-                        column(12,
-                               align = "center",
+                        column(4, offset = 4,
+                               align = "right",
                                textInput("textexplore", NULL, "",
-                                        placeholder = "enter a phrase here"),
-                               actionButton("submit", "Submit", class = "btn btn-primary"),
-                               textOutput("cleaned"),
-                               tableOutput("idcleaned"))),
+                                            placeholder = "enter a phrase here")),
+                        column(2,
+                               align = "left",
+                               actionButton("submit", "Submit", class = "btn btn-primary"))),
+                      fluidRow(
+                        column(4, offset = 4,
+                               align = "center",
+                               fluidRow(
+                                 column(4, align = "center", h3(textOutput("pred1"))),
+                                 column(4, align = "center", h3(textOutput("pred2"))), 
+                                 column(4, align = "center", h3(textOutput("pred3")))
+                               )
+                        )
+                      ),                      
+                      fluidRow(
+                        tags$div(class = "jumbotron",
+                                 fluidRow(
+                                          column(4,
+                                                 h4("Text after cleaning"),
+                                                 h5(textOutput("cleaned"))),
+                                          column(4,
+                                                 h4("Word search in the dictionary"),
+                                                 tableOutput("idcleaned"))
+                                 )
+                        )),
                       fluidRow(
                         tags$div(class = "jumbotron",
                                  fluidRow(column(4,
@@ -57,7 +78,7 @@ shinyUI(
                       )
 
              ),
-             tabPanel("Explore a word's presence",
+             tabPanel("Word presence exploration",
                       fluidRow(
                         column(12,
                                align = "center",
@@ -68,7 +89,7 @@ shinyUI(
                                textInput("wordexplore", NULL, "",
                                          placeholder = "enter a word here"),
                                actionButton("submitword", "Submit", class = "btn btn-primary"),
-                               p("(this may take up to a few seconds)"))
+                               p("(this may take a few seconds)"))
                       ),
                       fluidRow(
                         column(12,

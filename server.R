@@ -23,10 +23,13 @@ shinyServer(function(input, output, session) {
   
   monitor <- eventReactive(input$submit, {
     res <- lookDB(input$textexplore, bestWithMask, monitor = TRUE)
+    output$pred1 <- renderText(res[1])
+    output$pred2 <- renderText(res[2])
+    output$pred3 <- renderText(res[3])
     (MonitorData)
   })
 
-  output$cleaned <- renderText(paste("Cleaned:", monitor()$cleanStatement))
+  output$cleaned <- renderText(monitor()$cleanStatement)
   output$idcleaned <- renderTable(monitor()$cleanStatementIDs, colnames = FALSE, digits = 3)
   output$allscores <- renderTable(monitor()$allScores, colnames = FALSE, digits = 3)
   output$finalscore <- renderTable(monitor()$finalScore, colnames = FALSE, digits = 3)
