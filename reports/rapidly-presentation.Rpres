@@ -53,7 +53,7 @@ author: Sergey Sambor
 date: 2017-12-01
 autosize: true
 font-family: 'Lato'
-transition: concave
+transition: rotate
 
 Executive Summary
 ========================================================
@@ -92,4 +92,6 @@ The Shiny web application
 With the help of this WebApp a user can further explore the data and the prediction algorithm.
 - <strong>Next word suggestions</strong> tab allows one to try the main feature: get suggestions on the next word while typing
 - <strong>Prediction exploration</strong> tab displays how the prediction was made in details. Each step is screened with all the related data to explore effectiveness of the model.
-- <strong>Word presence exploration</strong> tab allowes user to explore a word's usage in the language, as it appeared in the training corpora
+- <strong>Word presence exploration</strong> tab allowes user to explore a word's usage in the language, as it appeared in the training corpora 
+
+https://mooromets.shinyapps.io/rapidly/
