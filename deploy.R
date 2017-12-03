@@ -1,11 +1,12 @@
 library(shiny)
 
-deployPath = "deploy/"
+deployPath = "deploy/rapidly/"
 srcDeployPath = paste0(deployPath, "src/")
 dataPath = paste0(deployPath, "data/")
+wwwPath = paste0(deployPath, "www/")
 
 #create or clean directories
-for (path in list(deployPath, srcDeployPath, dataPath)) {
+for (path in list(deployPath, srcDeployPath, dataPath, wwwPath)) {
   if (! dir.exists(path)) {
     dir.create(path)
   } else {
@@ -25,9 +26,11 @@ file.copy("src/cleanText.R", srcDeployPath)
 file.copy("src/monitor.R", srcDeployPath)
 file.copy("src/presence.R", srcDeployPath)
 
+file.copy("www/custom.css", wwwPath)
+
 #copy database
 file.copy("data/words.db", dataPath)
 
 setwd(deployPath)
-runApp() #deployApp()
-setwd("..")
+deployApp()
+setwd("../..")
