@@ -1,4 +1,5 @@
 library(shiny)
+library(rsconnect)
 
 deployPath = "deploy/rapidly/"
 srcDeployPath = paste0(deployPath, "src/")

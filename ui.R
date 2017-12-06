@@ -33,12 +33,10 @@ shinyUI(
                                align = "center",
                                h3("Type a phrase to explore how a prediction was built"))),
                       fluidRow(
-                        column(4, offset = 4,
-                               align = "right",
+                        column(12,
+                               align = "center",
                                textInput("textexplore", NULL, "",
-                                            placeholder = "enter a phrase here")),
-                        column(2,
-                               align = "left",
+                                            placeholder = "enter a phrase here"),
                                actionButton("submit", "Submit", class = "btn btn-primary"))),
                       fluidRow(
                         column(4, offset = 4,
