@@ -8,9 +8,11 @@ MAX_TERM_LEN <- 100 #queries of a longer size will be cut
 
 DEFAULT_PREDICTION <- c("the", "on", "a")
 
+SQLITE_WORDS_DB <- "data/words.db"
+
 require(RSQLite)
-dataConn <- dbConnect(RSQLite::SQLite(), "data/words.db")
-dataDB <- function(dbname = "data/words.db") {
+dataConn <- dbConnect(RSQLite::SQLite(), SQLITE_WORDS_DB)
+dataDB <- function(dbname = SQLITE_WORDS_DB) {
   if(!dbIsValid(dataConn))
     dataConn <<- dbConnect(RSQLite::SQLite(), dbname)
   dataConn

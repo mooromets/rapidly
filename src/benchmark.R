@@ -2,7 +2,7 @@
 
 source("src/cleanText.R")
 source("src/common.R")
-
+source("src/regressionModel.R")
 #' 
 #' reads, cleans and shiffles text from test file
 #' 
