@@ -1,7 +1,9 @@
-source("src/data.R")
+source("src/search.R")
 source("src/cleanText.R")
 source("src/common.R")
 
+
+# TODO: move this function into a WordsDB class?
 findWordsPresenceQueryList <- function(wordId, limit = 20) {
   tabname <- c("bigrams", "trigrams", "fourgrams", "fivegrams")
 
@@ -47,7 +49,7 @@ presenceList <- function(word, ...) {
   if(length(word) == 0)
     return(list())
   
-  wordId <- getWordID(word, dataDB())
+  wordId <- WORDS_DB$getWordID(word)
   if (is.na(wordId))
     return(list())
 

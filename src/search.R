@@ -1,6 +1,9 @@
 source("src/common.R")
 source("src/cleanText.R")
-source("src/data.R")
+source("src/wordsDB.R")
+
+#keep the connection to the database
+WORDS_DB = WordsDB()
 
 generateAllQueries <- function(queryIDs, predWordMaxCount = 4) {
   allReqs <- list()
@@ -30,7 +33,7 @@ generateAllQueries <- function(queryIDs, predWordMaxCount = 4) {
   unique(allReqs)
 }
 
-lookDB <- function(query, resFUN, TopNPerReq = 5, conn = dataDB(), monitor = FALSE, ...) {
+lookDB <- function(query, resFUN, TopNPerReq = 5, wordsDB = WORDS_DB, monitor = FALSE, ...) {
   IS_MONITOR <<- monitor
   monitorReset()
   
@@ -48,18 +51,19 @@ lookDB <- function(query, resFUN, TopNPerReq = 5, conn = dataDB(), monitor = FAL
   query <- query[max(1, length(query) - predWordMaxCount + 1) : length(query)]
   
   #main job starts here
-  queryIDs <- getWordID(query, conn)
+  queryIDs <- wordsDB$getWordID(query)
   monitorCleanStatementIDs(data.frame(word = query, id = as.integer(queryIDs)))
   allReqs <-  generateAllQueries(queryIDs, predWordMaxCount)
   answerList <- lapply(allReqs, 
                        function(rqst) {
-                         nxt <- getNextTopN(rqst, conn, TopNPerReq)
+                         nxt <- wordsDB$getNextTopN(rqst, TopNPerReq)
                          list(words = rqst,
                               nextIds = nxt$idnext,
                               nextProb = nxt$freq)
                        })
   monitorAnswersList(answerList)
   best3id <- resFUN(answerList)
-  words <- c(getWord(best3id, conn), DEFAULT_PREDICTION) #add default if there's not enoght predictions
+  words <- c(wordsDB$getWord(best3id), 
+             DEFAULT_PREDICTION) #add default if there's not enoght predictions
   return(words[1:3])
 }

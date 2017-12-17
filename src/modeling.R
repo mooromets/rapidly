@@ -9,6 +9,6 @@ getNextWord <- function(term, ...) {
   lookDB(term, bestWithMask, ...)
 }
 
-benchmark(benchmarkText(), etime = 300, getNextWord)
+#benchmark(benchmarkText(), etime = 300, getNextWord)
 
-#print(getNextWord("let it go dog"))
+print(getNextWord("let it go dog"))

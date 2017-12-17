@@ -3,7 +3,6 @@
 source("src/common.R")
 require(RSQLite)
 
-
 WordsDB <- setRefClass("WordsDB",
                        fields = list(dbname = "character", 
                                      dataConn  = "SQLiteConnection"))
@@ -101,7 +100,7 @@ WordsDB$methods(getNextTopN = function(x, nLimit) {
   #get summary frequency for this term
   q <- paste("select sum(freq) from", tabname, 
              "where", where)
-  res <- dbGetQuery(conn, q)
+  res <- dbGetQuery(dataConn, q)
   sumFreq <- res[1, 1]
   if (is.na(sumFreq) | sumFreq < 1)
     return (data.frame())

@@ -20,12 +20,12 @@ for (path in list(deployPath, srcDeployPath, dataPath, wwwPath)) {
 file.copy("ui.R", deployPath)
 file.copy("server.R", deployPath)
 file.copy("src/models.R", srcDeployPath)
-file.copy("src/data.R", srcDeployPath)
 file.copy("src/search.R", srcDeployPath)
 file.copy("src/common.R", srcDeployPath)
 file.copy("src/cleanText.R", srcDeployPath)
 file.copy("src/monitor.R", srcDeployPath)
 file.copy("src/presence.R", srcDeployPath)
+file.copy("src/wordsDB.R", srcDeployPath)
 
 file.copy("www/custom.css", wwwPath)
 
