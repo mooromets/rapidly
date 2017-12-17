@@ -78,7 +78,7 @@ WordsDB$methods(getWord = function(x) {
 #' 
 #' @return a dataframe with predictions in rows, and a column frequency 
 #' representing the probability of appearance of this 'next word'
-WordsDB$methods(getNextTopN = function(x, nLimit) {
+WordsDB$methods(getNextTopN = function(x, nLimit = 5) {
   if (length(x) < 1 | length(x) > 4 | #incorrect input
       length(x) < 3 & sum(is.na(x)) > 0 | #NA's in short terms
       is.na(x[1])) #first mustn't be an NA

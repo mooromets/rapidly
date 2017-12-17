@@ -24,3 +24,11 @@ test_that("words and IDs getting", {
   expect_equal(length(getwo), length(wo))
   expect_equivalent(getwo[2], ".NA.")
 })
+
+test_that("getNextTopN tests", {
+  wo <- c("look", "around")
+  ids <- wdb$getWordID(wo)
+  expect_equal(nrow(wdb$getNextTopN(ids, 5)), 5)
+  expect_equal(nrow(wdb$getNextTopN(ids[2], 5)), 5)
+  expect_equal(nrow(wdb$getNextTopN(ids, 2)), 2)
+})
