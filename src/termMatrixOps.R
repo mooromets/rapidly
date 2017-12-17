@@ -4,7 +4,7 @@ require(tm)
 require(RWeka)
 source("src/common.R")
 source("src/cleanText.R")
-source("src/data.R")
+#source("src/data.R")
 
 # ngramTdm - create Term Document Matrix for the specific ngram
 ngramTdm <- function (corpus, ngram = 1, minTermLen = 1, minBound = 1, delims = ' \r\n\t.,;:"()?!') {
