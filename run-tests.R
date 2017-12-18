@@ -1,6 +1,6 @@
 library(testthat)
 test_file("tests/cleanText.test.R")
-#test_file("tests/termMatrixOps.test.R")
+test_file("tests/termMatrixOps.test.R")
 test_file("tests/dictionary.test.R")
 test_file("tests/benchmark.test.R")
 test_file("tests/wordsDB.test.R")
