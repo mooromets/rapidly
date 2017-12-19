@@ -3,13 +3,14 @@
 source("src/cleanText.R")
 source("src/common.R")
 
+#' benchmarkText
 #' 
 #' reads, cleans and shiffles text from test file
 #' 
 #' @param seed to be used for shuffling
 #' @param filname filename
-#' @return text as character vector
 #' 
+#' @return text as character vector
 benchmarkText <- function(seed = 23456, filename = "") {
   fname <- ifelse(nchar(filename) == 0, 
                   paste0(outPathBase, "corpora/test/testChunk.txt"),
@@ -24,12 +25,13 @@ benchmarkText <- function(seed = 23456, filename = "") {
   sample(text, length(text))
 }
 
+#' line2TermsDF
 #'
 #' creates data.frame that contains phrases from line with their corresponding prediction 
 #'
 #' @param line character input
-#' @return data.frame with 2 columns: predictor - prediction
 #' 
+#' @return data.frame with 2 columns: predictor - prediction
 line2TermsDF <- function (line) {
   maxWC <- 10 # maximum words count in a single predictor
   terms <- c()
@@ -47,6 +49,7 @@ line2TermsDF <- function (line) {
              stringsAsFactors = FALSE)
 }
 
+#' benchmark
 #' 
 #' performs benchmarking
 #' 
@@ -54,8 +57,8 @@ line2TermsDF <- function (line) {
 #' @param etime timelimit for benchmarking process
 #' @param FUN function to predict next word
 #' @param ... passed to FUN
-#' @return list with the results that is also printed
 #' 
+#' @return list with the results that is also printed
 benchmark <- function(text, etime = Inf, FUN, ...) {
   score <- 0
   maxScore <- 0
