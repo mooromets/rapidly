@@ -1,13 +1,7 @@
 library(shiny)
 library(shinythemes)
 shinyUI(
-  navbarPage(span(p("R", class = "displ-inline rapidly color-orange"), 
-                  p("a", class = "displ-inline rapidly color-yellow"), 
-                  p("p", class = "displ-inline rapidly color-green"), 
-                  p("i", class = "displ-inline rapidly color-orange"), 
-                  p("d", class = "displ-inline rapidly color-red"), 
-                  p("l", class = "displ-inline rapidly color-green"), 
-                  p("y", class = "displ-inline rapidly color-yellow")),
+  navbarPage("Rapidly",
              theme = shinytheme("flatly"),
              tabPanel("Next word suggestions",
              tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")),
