@@ -79,6 +79,7 @@ for (vecFiles in listOfTDMs) {
       leftTDM <- leftTDM[-(freqColIndex + 1)]
     }
   }
+  #save
   outFileName <- paste0(gsub(pattern = "[.]", replacement = "FULL.", vecFiles[1]))
   fullTdmFiles <- c(fullTdmFiles, outFileName)
   write.csv(leftTDM, outFileName, row.names = FALSE)
