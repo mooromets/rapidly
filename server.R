@@ -26,7 +26,7 @@ shinyServer(function(input, output, session) {
     output$pred1 <- renderText(res[1])
     output$pred2 <- renderText(res[2])
     output$pred3 <- renderText(res[3])
-    (MonitorData)
+    (MONITOR$m_data)
   })
 
   output$cleaned <- renderText(monitor()$cleanStatement)

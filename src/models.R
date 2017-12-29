@@ -73,7 +73,7 @@ bestWithMask <- function(items, alpha = 0.5, maskedPow = 1.7) {
                   data.frame(nextId = item$nextIds, 
                              score = item$nextProb * a)
                 }))
-  monitorAllScores(allPred)
+  MONITOR$storeAllScores(allPred)
   if (nrow(allPred) == 0)
     return(vector())
 
@@ -81,7 +81,7 @@ bestWithMask <- function(items, alpha = 0.5, maskedPow = 1.7) {
     group_by(nextId) %>%
     summarise(score =  sum(score)) %>%
     arrange(desc(score)))
-  monitorFinalScore(allPred)
+  MONITOR$storeFinalScore(allPred)
   allPred <- top_n(allPred, n = 3, score)
   
   as.vector(allPred$nextId)

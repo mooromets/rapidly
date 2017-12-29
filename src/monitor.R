@@ -1,54 +1,101 @@
-IS_MONITOR <- TRUE
+#' Monitor is a singleton class that keeps track on how a prediction was made
 
-MonitorData <- list()
+source("src/wordsDB.R")
 
-monitorReset <- function(){
-if (IS_MONITOR)  
-  MonitorData <<- list()   
-}
+Monitor <- setRefClass("Monitor",
+                       fields = list(is_enabled = "logical",
+                                     m_data = "list"))
 
-monitorCleanStatement <- function(clean) {
-  if (IS_MONITOR)
-    MonitorData[["cleanStatement"]] <<- clean
-}
+#' initialize 
+#' 
+Monitor$methods(initialize = function(enabled = FALSE) {
+  .self$is_enabled <- enabled
+  .self$m_data <- list()
+})
 
-monitorCleanStatementIDs <- function(df) {
-  if (IS_MONITOR)
-    MonitorData[["cleanStatementIDs"]] <<- df
-}
 
-monitorAnswersList <- function(al) {
-  if (IS_MONITOR) {
+#' reset
+#' 
+Monitor$methods(reset = function(){
+  if (is_enabled)  
+    .self$m_data <- list()   
+})
+
+
+#' storeCleanStatement
+#' 
+#' store the clean statement data
+#' 
+#' @param clean a string, containing the clean statement
+Monitor$methods(storeCleanStatement = function(clean) {
+  if (is_enabled)
+    .self$m_data[["cleanStatement"]] <- clean
+})
+
+
+#' storeCleanStatementIDs
+#'
+#' store words IDs of a clean sentence  
+#'
+#' @param ids a vector of IDs  
+Monitor$methods(storeCleanStatementIDs = function(ids) {
+  if (is_enabled)
+    .self$m_data[["cleanStatementIDs"]] <- ids
+})
+
+
+#' storeAnswersList
+#'
+#' store all answers obtained
+#' 
+#' @param al a dataframe with answers    
+Monitor$methods(storeAnswersList = function(al) {
+  if (is_enabled) {
+    wdb <- WordsDB()
     li <- lapply(al, 
                 function(item) {
                   if (! is.null(item$nextIds)) {
-                    return(list(words = getWord(item$words, dataDB()),
-                                nextdf = data.frame(nextWords = getWord(item$nextIds, dataDB()),
+                    return(list(words = wdb$getWord(item$words),
+                                nextdf = data.frame(nextWords = wdb$getWord(item$nextIds),
                                                     nextProb = item$nextProb)))
                   } else {
-                    return(list(words = getWord(item$words, dataDB()),
+                    return(list(words = wdb$getWord(item$words),
                                 nextdf = data.frame(nextWords = c(".NULL."),
                                                     nextProb = c(".NULL."))))
                   }
                     
                 })
-    MonitorData[["answersList"]] <<- li
+    .self$m_data[["answersList"]] <- li
   }
-}
+})
 
-monitorAllScores <- function(as) {
-  if (IS_MONITOR) {
-    df <- data.frame(word = getWord(as[, "nextId"], dataDB()),
+
+#' storeAllScores
+#' 
+#' store the scores every answer got
+#' 
+#' @param as a dataframe, containing predicted answers
+Monitor$methods(storeAllScores = function(as) {
+  if (is_enabled) {
+    wdb <- WordsDB()
+    df <- data.frame(word = wdb$getWord(as[, "nextId"]),
                      score = as[, "score"])
-    MonitorData[["allScores"]] <<- df
+    .self$m_data[["allScores"]] <- df
   }
-}
+})
 
-monitorFinalScore <- function(fs) {
-  if (IS_MONITOR) {
+
+#' storeFinalScore
+#' 
+#' store the final cumulative score for every prediction
+#' 
+#' @param fs a dataframe with scores
+Monitor$methods(storeFinalScore = function(fs) {
+  if (is_enabled) {
+    wdb <- WordsDB()
     fs <- as.data.frame(fs)
-    df <- data.frame(word = getWord(fs[, "nextId"], dataDB()),
+    df <- data.frame(word = wdb$getWord(fs[, "nextId"]),
                      score = fs[, "score"])
-    MonitorData[["finalScore"]] <<- df
+    .self$m_data[["finalScore"]] <- df
   }
-}
+})

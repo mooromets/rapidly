@@ -34,11 +34,11 @@ generateAllQueries <- function(queryIDs, predWordMaxCount = 4) {
 }
 
 lookDB <- function(query, resFUN, TopNPerReq = 5, wordsDB = WORDS_DB, monitor = FALSE, ...) {
-  IS_MONITOR <<- monitor
-  monitorReset()
+  MONITOR$is_enabled <<- monitor
+  MONITOR$reset()
   
   query <- cleanInput(query)
-  monitorCleanStatement(query)  
+  MONITOR$storeCleanStatement(query)  
   if (length(query) == 0)
     return(DEFAULT_PREDICTION)
 
@@ -52,7 +52,7 @@ lookDB <- function(query, resFUN, TopNPerReq = 5, wordsDB = WORDS_DB, monitor = 
   
   #main job starts here
   queryIDs <- wordsDB$getWordID(query)
-  monitorCleanStatementIDs(data.frame(word = query, id = as.integer(queryIDs)))
+  MONITOR$storeCleanStatementIDs(data.frame(word = query, id = as.integer(queryIDs)))
   allReqs <-  generateAllQueries(queryIDs, predWordMaxCount)
   answerList <- lapply(allReqs, 
                        function(rqst) {
@@ -61,7 +61,7 @@ lookDB <- function(query, resFUN, TopNPerReq = 5, wordsDB = WORDS_DB, monitor = 
                               nextIds = nxt$idnext,
                               nextProb = nxt$freq)
                        })
-  monitorAnswersList(answerList)
+  MONITOR$storeAnswersList(answerList)
   best3id <- resFUN(answerList)
   words <- c(wordsDB$getWord(best3id), 
              DEFAULT_PREDICTION) #add default if there's not enoght predictions
