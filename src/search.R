@@ -38,7 +38,9 @@ lookDB <- function(query, resFUN, TopNPerReq = 5, wordsDB = WORDS_DB, monitor = 
   MONITOR$reset()
   
   query <- cleanInput(query)
+  
   MONITOR$storeCleanStatement(query)  
+  
   if (length(query) == 0)
     return(DEFAULT_PREDICTION)
 
@@ -47,13 +49,13 @@ lookDB <- function(query, resFUN, TopNPerReq = 5, wordsDB = WORDS_DB, monitor = 
   query <- unlist(strsplit(as.character(query), " "))
   if (length(query) == 0) 
     return (DEFAULT_PREDICTION)
-  #query <- query[nchar(query) > 0] --- cleanText() did this job
   query <- query[max(1, length(query) - predWordMaxCount + 1) : length(query)]
   
   #main job starts here
   queryIDs <- wordsDB$getWordID(query)
   MONITOR$storeCleanStatementIDs(data.frame(word = query, id = as.integer(queryIDs)))
   allReqs <-  generateAllQueries(queryIDs, predWordMaxCount)
+  #process all requests
   answerList <- lapply(allReqs, 
                        function(rqst) {
                          nxt <- wordsDB$getNextTopN(rqst, TopNPerReq)
@@ -62,6 +64,7 @@ lookDB <- function(query, resFUN, TopNPerReq = 5, wordsDB = WORDS_DB, monitor = 
                               nextProb = nxt$freq)
                        })
   MONITOR$storeAnswersList(answerList)
+  #pick out only the best 3 results from all predictions
   best3id <- resFUN(answerList)
   words <- c(wordsDB$getWord(best3id), 
              DEFAULT_PREDICTION) #add default if there's not enoght predictions

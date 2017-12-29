@@ -48,7 +48,7 @@ Monitor$methods(storeCleanStatementIDs = function(ids) {
 #'
 #' store all answers obtained
 #' 
-#' @param al a dataframe with answers    
+#' @param al a character list of possible next word candidates    
 Monitor$methods(storeAnswersList = function(al) {
   if (is_enabled) {
     wdb <- WordsDB()
