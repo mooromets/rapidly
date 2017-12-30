@@ -1,5 +1,8 @@
-#make train, test and validate samples
+#make samples for diferent purposes
 
+#' makeSamples
+#' 
+#' make train, test and validate samples
 makeSamples <- function(inPath = "data/final/en_US/", 
                         outPath = "data/corpora/") 
 {
@@ -57,7 +60,10 @@ makeSamples <- function(inPath = "data/final/en_US/",
   close(testFile)
 }
 
-#create a small sample for explorations and debugging
+
+#' createSmallSample
+#' 
+#' create a small sample for explorations and debugging
 createSmallSample <- function (inputPath = "data/final/en_US/",
                                outputFile = "data/small_sample.txt",
                                outputSizeRate = .02)
