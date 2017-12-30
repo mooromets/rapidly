@@ -2,8 +2,9 @@ source("src/search.R")
 source("src/cleanText.R")
 source("src/common.R")
 
+# TODO
+# inherit these functions instead of inserting them into a WordsDB class ?
 
-# TODO: move this function into a WordsDB class?
 findWordsPresenceQueryList <- function(wordId, limit = 20) {
   tabname <- c("bigrams", "trigrams", "fourgrams", "fivegrams")
 

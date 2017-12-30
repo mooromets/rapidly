@@ -125,3 +125,74 @@ WordsDB$methods(getNextTopN = function(x, nLimit = 5) {
   df$freq <- df$freq / sumFreq
   df
 })
+
+
+#' makeQueryListWordPresence
+#'
+#' creates a list of queries to find all appearances of a word
+#' 
+#' @param wordId a word's id
+#' @param limit a limit of lines to return from database
+#' 
+#' @return a list of characters, containing SQL queries 
+WordsDB$methods(makeQueryListWordPresence = function(wordId, limit = 20) {
+  tabname <- c("bigrams", "trigrams", "fourgrams", "fivegrams")
+  
+  out <- list()
+  for(itab in seq_along(tabname)) {
+    nWords <- itab + 1
+    selectFromStr <- paste("SELECT d.word,", 
+                           paste(paste0("d", 
+                                        as.character(seq_len(itab)),
+                                        ".word"), 
+                                 collapse = ", "),
+                           "FROM",
+                           tabname[itab],
+                           "b")
+    joinStr <- paste("JOIN dict d ON b.idnext == d.id",
+                     paste0("JOIN dict d", 
+                            as.character(seq_len(itab)),
+                            " ON b.idword",
+                            as.character(seq_len(itab)),
+                            " = d",
+                            as.character(seq_len(itab)),
+                            ".id",
+                            collapse = " "))
+    whereStr <- paste("WHERE b.idnext =", 
+                      as.character(wordId),
+                      "OR",
+                      paste0("b.idword", 
+                             as.character(seq_len(itab)),
+                             " = ",
+                             as.character(wordId),
+                             collapse = " OR ")
+    )
+    wholeQue <- paste(selectFromStr, joinStr, whereStr,
+                      "ORDER BY b.freq desc",
+                      "LIMIT", limit)
+    out[[itab]] <- wholeQue
+  }
+  out
+})
+
+
+#' wordPresence
+#' 
+#' find the word's presence in all phrases in database
+#' 
+#' @param word a character word
+#' @param ... passed to makeQueryListWordPresence function
+#' 
+#' @return a list of lists with pfrases
+WordsDB$methods(wordPresence = function(word, ...) {
+  word <- cleanInput(word)
+  if(length(word) == 0)
+    return(list())
+  
+  wordId <- getWordID(word)
+  if (is.na(wordId))
+    return(list())
+  
+  lapply(makeQueryListWordPresence(wordId, ...), 
+         function(que) dbGetQuery(dataConn, que))
+})
