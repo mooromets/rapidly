@@ -9,8 +9,8 @@ Monitor <- setRefClass("Monitor",
 #' initialize 
 #' 
 Monitor$methods(initialize = function(enabled = FALSE) {
-  .self$is_enabled <- enabled
-  .self$m_data <- list()
+  is_enabled <<- enabled
+  m_data <<- list()
 })
 
 
@@ -18,7 +18,7 @@ Monitor$methods(initialize = function(enabled = FALSE) {
 #' 
 Monitor$methods(reset = function(){
   if (is_enabled)  
-    .self$m_data <- list()   
+    m_data <<- list()   
 })
 
 
@@ -29,7 +29,7 @@ Monitor$methods(reset = function(){
 #' @param clean a string, containing the clean statement
 Monitor$methods(storeCleanStatement = function(clean) {
   if (is_enabled)
-    .self$m_data[["cleanStatement"]] <- clean
+    m_data[["cleanStatement"]] <<- clean
 })
 
 
@@ -40,7 +40,7 @@ Monitor$methods(storeCleanStatement = function(clean) {
 #' @param ids a vector of IDs  
 Monitor$methods(storeCleanStatementIDs = function(ids) {
   if (is_enabled)
-    .self$m_data[["cleanStatementIDs"]] <- ids
+    m_data[["cleanStatementIDs"]] <<- ids
 })
 
 
@@ -65,7 +65,7 @@ Monitor$methods(storeAnswersList = function(al) {
                   }
                     
                 })
-    .self$m_data[["answersList"]] <- li
+    m_data[["answersList"]] <<- li
   }
 })
 
@@ -80,7 +80,7 @@ Monitor$methods(storeAllScores = function(as) {
     wdb <- WordsDB()
     df <- data.frame(word = wdb$getWord(as[, "nextId"]),
                      score = as[, "score"])
-    .self$m_data[["allScores"]] <- df
+    m_data[["allScores"]] <<- df
   }
 })
 
@@ -96,6 +96,6 @@ Monitor$methods(storeFinalScore = function(fs) {
     fs <- as.data.frame(fs)
     df <- data.frame(word = wdb$getWord(fs[, "nextId"]),
                      score = fs[, "score"])
-    .self$m_data[["finalScore"]] <- df
+    m_data[["finalScore"]] <<- df
   }
 })
