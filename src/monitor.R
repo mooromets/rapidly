@@ -2,6 +2,8 @@
 
 source("src/wordsDB.R")
 
+WordsDB <- getRefClass("WordsDB")
+
 Monitor <- setRefClass("Monitor",
                        fields = list(is_enabled = "logical",
                                      m_data = "list"))

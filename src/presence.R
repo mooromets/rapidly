@@ -1,4 +1,6 @@
-source("src/common.R")
+source("src/wordsDB.R")
+
+WordsDB <- getRefClass("WordsDB")
 
 presenceList <- function(word, ...) {
   wdb = WordsDB()

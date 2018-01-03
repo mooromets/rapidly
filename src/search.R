@@ -3,6 +3,7 @@ source("src/cleanText.R")
 source("src/wordsDB.R")
 
 #keep the connection to the database
+WordsDB <- getRefClass("WordsDB")
 WORDS_DB = WordsDB()
 
 generateAllQueries <- function(queryIDs, predWordMaxCount = 4) {
