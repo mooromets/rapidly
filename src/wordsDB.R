@@ -11,16 +11,16 @@ WordsDB <- setRefClass("WordsDB",
 #' initialize 
 #' 
 #' opens a connection to the database
-WordsDB$methods(initialize = function(dbname = SQLITE_WORDS_DB) {
-  .self$dbname <- dbname
-  .self$dataConn <- dbConnect(RSQLite::SQLite(), .self$dbname)
+WordsDB$methods(initialize = function(name = SQLITE_WORDS_DB) {
+  dbname <<- name
+  dataConn <<- dbConnect(RSQLite::SQLite(), dbname)
 })
 
 
 #' finalize
 #' 
 #' closes the connection to the database
-WordsDB$methods(finalize = function() dbDisconnect(.self$dataConn))
+WordsDB$methods(finalize = function() dbDisconnect(dataConn))
 
 
 #' getWordID
