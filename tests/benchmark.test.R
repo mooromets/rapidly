@@ -1,6 +1,6 @@
 require(testthat)
 setwd("..")
-source("src/benchmark.R")
+source("R/benchmark.R")
 
 context("test benchmark")
 

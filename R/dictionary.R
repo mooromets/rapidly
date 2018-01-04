@@ -2,7 +2,7 @@ library(Matrix)
 library(tm)
 options(java.parameters = "-Xmx4096m")
 library(RWeka)
-source("src/cleanText.R")
+source("R/cleanText.R")
 
 fullDictFile <- "fullDictionary.csv"
 cleanDictFile <- "cleanDictionary.csv"

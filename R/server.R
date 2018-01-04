@@ -1,8 +1,8 @@
 library(shiny)
 
-source("src/models.R")
-source("src/search.R")
-source("src/presence.R")
+source("R/models.R")
+source("R/search.R")
+source("R/presence.R")
 
 shinyServer(function(input, output, session) {
   observeEvent(input$intext, {

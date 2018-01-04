@@ -1,7 +1,7 @@
 # different models for picking the next word predictions
 
 library(dplyr)
-source("src/monitor.R")
+source("R/monitor.R")
 
 
 #' bestWithMask

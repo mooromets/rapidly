@@ -1,7 +1,7 @@
-source("src/models.R")
-source("src/search.R")
-source("src/benchmark.R")
-source("src/common.R")
+source("R/models.R")
+source("R/search.R")
+source("R/benchmark.R")
+source("R/common.R")
 
 getNextWord <- function(term, ...) {
   lookDB(term, bestWithMask, ...)

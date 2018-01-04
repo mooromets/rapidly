@@ -2,7 +2,7 @@
 
 library(RSQLite)
 
-source("src/common.R")
+source("R/common.R")
 
 # SQL queries
 

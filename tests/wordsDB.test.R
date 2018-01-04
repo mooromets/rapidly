@@ -1,6 +1,6 @@
 require(testthat)
 setwd("..")
-source("src/wordsDB.R")
+source("R/wordsDB.R")
 
 context("WordsDB tests")
 

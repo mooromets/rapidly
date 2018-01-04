@@ -1,5 +1,5 @@
 outPathBase <- "data/full1119/"
-source("src/benchmark.R")
+source("R/benchmark.R")
 
 for (thres in 1:15) {
   cat(sprintf("--- thres = %d ---", thres))
@@ -8,6 +8,6 @@ for (thres in 1:15) {
   source("script/modelData.R")
   print(sum(sapply(sparseTpmList, function(m) object.size(m) / 1024 ^ 2)))
   print(Sys.time())
-  source("src/modeling.R")
+  source("R/modeling.R")
   print(Sys.time())
 }

@@ -1,6 +1,6 @@
 require(testthat)
 setwd("..")
-source("src/dictionary.R")
+source("R/dictionary.R")
 
 context("dictionary creation")
 

@@ -1,6 +1,6 @@
 #' WordsDB is a class to access the word data stored in a database
 
-source("src/common.R")
+source("R/common.R")
 require(RSQLite)
 
 WordsDB <- setRefClass("WordsDB",

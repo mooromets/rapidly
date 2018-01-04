@@ -1,7 +1,7 @@
 # benchmark functions
 
-source("src/cleanText.R")
-source("src/common.R")
+source("R/cleanText.R")
+source("R/common.R")
 
 #' benchmarkText
 #' 

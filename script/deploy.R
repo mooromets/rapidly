@@ -2,7 +2,7 @@ library(shiny)
 library(rsconnect)
 
 deployPath = "deploy/rapidly/"
-srcDeployPath = paste0(deployPath, "src/")
+srcDeployPath = paste0(deployPath, "R/")
 dataPath = paste0(deployPath, "data/")
 wwwPath = paste0(deployPath, "www/")
 
@@ -19,13 +19,13 @@ for (path in list(deployPath, srcDeployPath, dataPath, wwwPath)) {
 #copy source files
 file.copy("ui.R", deployPath)
 file.copy("server.R", deployPath)
-file.copy("src/models.R", srcDeployPath)
-file.copy("src/search.R", srcDeployPath)
-file.copy("src/common.R", srcDeployPath)
-file.copy("src/cleanText.R", srcDeployPath)
-file.copy("src/monitor.R", srcDeployPath)
-file.copy("src/presence.R", srcDeployPath)
-file.copy("src/wordsDB.R", srcDeployPath)
+file.copy("R/models.R", srcDeployPath)
+file.copy("R/search.R", srcDeployPath)
+file.copy("R/common.R", srcDeployPath)
+file.copy("R/cleanText.R", srcDeployPath)
+file.copy("R/monitor.R", srcDeployPath)
+file.copy("R/presence.R", srcDeployPath)
+file.copy("R/wordsDB.R", srcDeployPath)
 
 file.copy("www/custom.css", wwwPath)
 

@@ -1,5 +1,5 @@
 
-source("src/monitor.R")
+source("R/monitor.R")
 
 Monitor <- getRefClass("Monitor")
 

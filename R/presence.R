@@ -1,4 +1,4 @@
-source("src/wordsDB.R")
+source("R/wordsDB.R")
 
 WordsDB <- getRefClass("WordsDB")
 

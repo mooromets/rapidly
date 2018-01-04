@@ -2,7 +2,7 @@
 
 library(tm)
 
-source("src/common.R")
+source("R/common.R")
 
 
 #' removeStandaloneLetters

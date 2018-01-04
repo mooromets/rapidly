@@ -1,6 +1,6 @@
 require(testthat)
 setwd("..")
-source("src/cleanText.R")
+source("R/cleanText.R")
 
 context("text cleaning")
 

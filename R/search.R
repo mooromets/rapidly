@@ -1,6 +1,6 @@
-source("src/common.R")
-source("src/cleanText.R")
-source("src/wordsDB.R")
+source("R/common.R")
+source("R/cleanText.R")
+source("R/wordsDB.R")
 
 #keep the connection to the database
 WordsDB <- getRefClass("WordsDB")

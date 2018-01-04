@@ -1,6 +1,6 @@
 require(testthat)
 setwd("..")
-source("src/models.R")
+source("R/models.R")
 
 context("models tests")
 

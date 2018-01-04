@@ -1,6 +1,6 @@
 #' Monitor is a singleton class that keeps track on how a prediction was made
 
-source("src/wordsDB.R")
+source("R/wordsDB.R")
 
 WordsDB <- getRefClass("WordsDB")
 

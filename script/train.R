@@ -2,10 +2,10 @@ library(tm)
 options(java.parameters = "-Xmx6000m")
 library(RWeka)
 library(dplyr)
-source("src/cleanText.R")
-source("src/dictionary.R")
-source("src/makeSamples.R")
-source("src/termMatrixOps.R")
+source("R/cleanText.R")
+source("R/dictionary.R")
+source("R/makeSamples.R")
+source("R/termMatrixOps.R")
 
 # sample data
 inPath <- "data/final/en_US/"
