@@ -3,7 +3,6 @@
 *.Rhistory
 data/
 .Rproj.user
-*.Rproj
 reports/rsconnect/
 *.html
 drafts/
