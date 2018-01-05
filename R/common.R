@@ -14,11 +14,3 @@ DEFAULT_PREDICTION <- c("the", "on", "a")
 SQLITE_WORDS_DB <- "data/words.db"
 
 MONITOR <- Monitor()
-
-require(RSQLite)
-dataConn <- dbConnect(RSQLite::SQLite(), SQLITE_WORDS_DB)
-dataDB <- function(dbname = SQLITE_WORDS_DB) {
-  if(!dbIsValid(dataConn))
-    dataConn <<- dbConnect(RSQLite::SQLite(), dbname)
-  dataConn
-} 

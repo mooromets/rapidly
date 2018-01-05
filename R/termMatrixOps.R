@@ -2,7 +2,6 @@
 
 require(tm)
 require(RWeka)
-source("R/common.R")
 
 #' ngramTdm 
 #' 
