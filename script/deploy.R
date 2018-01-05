@@ -17,8 +17,9 @@ for (path in list(deployPath, srcDeployPath, dataPath, wwwPath)) {
 }
 
 #copy source files
-file.copy("ui.R", deployPath)
-file.copy("server.R", deployPath)
+file.copy("R/app.R", deployPath)
+file.copy("R/ui.R", srcDeployPath)
+file.copy("R/server.R", srcDeployPath)
 file.copy("R/models.R", srcDeployPath)
 file.copy("R/search.R", srcDeployPath)
 file.copy("R/common.R", srcDeployPath)

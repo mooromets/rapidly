@@ -4,7 +4,7 @@ source("R/models.R")
 source("R/search.R")
 source("R/presence.R")
 
-shinyServer(function(input, output, session) {
+serverRapidly <- function(input, output, session) {
   observeEvent(input$intext, {
     if (nchar(input$intext) > 0 ) {
       t <- system.time({
@@ -80,4 +80,4 @@ shinyServer(function(input, output, session) {
              })
     )
   })
-})
+}

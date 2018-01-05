@@ -1,6 +1,7 @@
 library(shiny)
 library(shinythemes)
-shinyUI(
+
+uiRapidly <- 
   navbarPage("Rapidly",
              theme = shinytheme("flatly"),
              tabPanel("Next word suggestions",
@@ -89,5 +90,4 @@ shinyUI(
                                uiOutput("phralist"))
                       )
              )
-    )  
-)
+    )
