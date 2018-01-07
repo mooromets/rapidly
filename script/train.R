@@ -2,6 +2,7 @@ library(tm)
 options(java.parameters = "-Xmx6000m")
 library(RWeka)
 library(dplyr)
+source("R/common.R")
 source("R/cleanText.R")
 source("R/dictionary.R")
 source("R/makeSamples.R")
@@ -28,39 +29,16 @@ print(paste("Dictionary size: ", as.character(length(dictHash))))
 
 # prepare dirs
 dirsList <- dir(trainPath)
-nGramsRange <- 2:5
-listOfTDMs <- vector("list", length(nGramsRange))
+
+listOfTDMs <- vector("list", length(NGRAM_RANGE))
 # get and save all nGrams
 for (idir in dirsList) {
-  for (N in nGramsRange) {
-    print(paste(idir, as.character(N)))
-    print(Sys.time()); print("read and clean Corpus");
-    corp <- VCorpus(DirSource(paste0(trainPath, idir)))
-    corp <- tm_map(corp, content_transformer(cleanText))
-    print(Sys.time()); print("create TDM");
-    mtx <- as.matrix(ngramTdm(corp, ngram = N))
-    # convert words into IDs    
-    # remove phrases with a low frequency
-    idxFreq <- as.vector(mtx[, 1] > 1)
-    tmpDF <- data.frame(term = rownames(mtx)[idxFreq], 
-                        freq = mtx[idxFreq, 1], 
-                        stringsAsFactors = FALSE,
-                        row.names = NULL)
-    rm(mtx)
-    tmpDF <- as.data.frame(t(apply(tmpDF, 1, function(row) {
-      matrix(data = c(as.vector(sapply(unlist(strsplit(row[1], " ")), 
-                                         function(x) as.numeric(dictHash[[x]])),
-                                  mode = "numeric"
-                                ), 
-                      as.numeric(row[2])),    
-              nrow = 1)
-    })))
-    # remove lines with words absent in the dictionary
-    tmpDF <- tmpDF[complete.cases(tmpDF), ]
-    tdmFileNAme <- paste0(outPathBase, idir, as.character(N), ".csv" )
-    write.csv(tmpDF, tdmFileNAme, row.names = FALSE)
-    listOfTDMs[[which(nGramsRange == N)]] <- c(listOfTDMs[[which(nGramsRange == N)]], tdmFileNAme)
-    print(Sys.time())
+  for (N in NGRAM_RANGE) {
+    tdmInDF <- extractTdmFromDir(N, trainPath, outPathBase, idir, dictHash)
+    
+    tdmFileName <- paste0(outPathBase, idir, as.character(N), ".csv" )
+    write.csv(tdmInDF, tdmFileName, row.names = FALSE)
+    listOfTDMs[[which(NGRAM_RANGE == N)]] <- c(listOfTDMs[[which(NGRAM_RANGE == N)]], tdmFileName)
   }
 }
 
