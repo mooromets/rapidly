@@ -27,10 +27,19 @@ ngramTdm <- function (corpus, ngram = 1, minTermLen = 1, minBound = 1, delims = 
 }
 
 
-extractTdmFromDir <- function(NGram, inPath, outPath, dirName, dictHash) {
-  print(paste(dirName, as.character(NGram)))
+#' extractTerms 
+#'
+#' reads a corpora, performes content transforamation, gets TermDocumentMatrix 
+#' which content is returned as a data.frame
+#' 
+#' @param NGram a numeric size of an ngram
+#' @param inSource the path to the corpora
+#' @param dictHash the dictionary
+#' 
+#' @return a data.frame containing all terms from corpora  
+extractTerms <- function(NGram, inSource, dictHash) {
   print(Sys.time()); print("read and clean Corpus");
-  corp <- VCorpus(DirSource(paste0(inPath, dirName)))
+  corp <- VCorpus(DirSource(inSource))
   corp <- tm_map(corp, content_transformer(cleanText))
   print(Sys.time()); print("create TDM");
   mtx <- as.matrix(ngramTdm(corp, ngram = NGram))

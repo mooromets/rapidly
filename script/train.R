@@ -34,7 +34,7 @@ listOfTDMs <- vector("list", length(NGRAM_RANGE))
 # get and save all nGrams
 for (idir in dirsList) {
   for (N in NGRAM_RANGE) {
-    tdmInDF <- extractTdmFromDir(N, trainPath, outPathBase, idir, dictHash)
+    tdmInDF <- extractTerms(N, paste0(inPath, dirName), dictHash)
     
     tdmFileName <- paste0(outPathBase, idir, as.character(N), ".csv" )
     write.csv(tdmInDF, tdmFileName, row.names = FALSE)
