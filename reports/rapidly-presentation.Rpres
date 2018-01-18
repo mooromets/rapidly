@@ -95,3 +95,4 @@ With the help of this WebApp, a user can further explore the data and the predic
 - <strong>Word presence exploration</strong> tab allows user to explore a word's usage in the language, as it appeared in the training corpora 
 
 https://mooromets.shinyapps.io/rapidly/
+https://github.com/mooromets/rapidly
