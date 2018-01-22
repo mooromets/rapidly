@@ -11,21 +11,36 @@ Web application https://mooromets.shinyapps.io/rapidly/
 ### Prerequisistes
 An input text corpora must be placed in data/final/ dir in the project root.
 ### Building
-To clean data, run script/clean.R  
-To train on cleaned data, run script/clean.R  
-To create SQLite DB on trained model, run script/createDB.R  
-To test the prediction, run script/modeling.R  
+All commands are performed in R console.
+To clean data 
+```
+source('script/clean.R')
+```
+To train on cleaned data
+```
+source('script/clean.R')
+```
+To create SQLite DB on trained model
+```
+source('script/createDB.R')
+```
+To test the prediction
+```
+source('script/modeling.R`)
+```
 
 ## Testing
 
 All unit tests are in tests/ dir  
-To run all tests, run script/run-tests.R  
+To run all tests
+```
+source('script/run-tests.R')
+```
 
 ## Deploy Web application
-
-run script/deploy.R  
-in R console navigate to deploy/ dir and run  
 ```
+source('script/deploy.R')
+setwd('./deploy/')
 deployApp()
 ```
 ## Authors
