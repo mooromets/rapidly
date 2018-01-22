@@ -7,21 +7,30 @@ A five-slide presentation is available at RPubs http://rpubs.com/mooromets/33693
 Web application https://mooromets.shinyapps.io/rapidly/  
 
 ## Getting Started
+
 ### Prerequisistes
 An input text corpora must be placed in data/final/ dir in the project root.
 ### Building
-To clean data, run script/clean.R
-To train on cleaned data, run script/clean.R
-To create SQLite DB on trained model, run script/createDB.R
-To test the prediction, run script/modeling.R
+To clean data, run script/clean.R  
+To train on cleaned data, run script/clean.R  
+To create SQLite DB on trained model, run script/createDB.R  
+To test the prediction, run script/modeling.R  
+
 ## Testing
-All unit tests are in tests/ dir
-To run all tests, run script/run-tests.R
+
+All unit tests are in tests/ dir  
+To run all tests, run script/run-tests.R  
+
 ## Deploy Web application
-run script/deploy.R
-in R console navigate to deploy/ dir and run 
+
+run script/deploy.R  
+in R console navigate to deploy/ dir and run  
 ```
 deployApp()
 ```
+## Authors
+
+* **Sergey Sambor** - *Initial work* - [mooromets](https://github.com/mooromets)
+
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details  
