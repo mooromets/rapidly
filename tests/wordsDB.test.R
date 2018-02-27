@@ -9,12 +9,15 @@ test_that("creation of WordsDB, opening a connection", {
   expect_true(dbIsValid(wdb$dataConn))
 })
 
-test_that("words and IDs getting", {
+test_that("words and IDs getting 1", {
   wo <- c("home", "crow", "blue")
   ids <- wdb$getWordID(wo)
   expect_equal(length(ids), length(wo))
   getwo <- wdb$getWord(ids)
   expect_equal(getwo, wo)
+})
+
+test_that("words and IDs getting 2", {
   #NA
   wo <- c("home", "NAword", "blue")
   ids <- wdb$getWordID(wo)
